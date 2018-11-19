@@ -33,7 +33,7 @@ tabPanel("Hintergrund",
          fluidPage(
            titlePanel("FOMshiny: Modellierung und Simulation"),
            fluidRow(column(12, h3("Hintergrund"))),
-           fluidRow(column(12, "Das Gewicht variiert. Mancher wiegen 80kg, andere 60kg")),
+           fluidRow(column(12, "Das Gewicht variiert. Manche wiegen 80kg, andere 60kg")),
            fluidRow(column(12, "Hängt das vielleicht mit der Größe und dem Geschlecht zusammen?")),
            fluidRow(column(12, "Dazu betrachten wir eine lineare Regression mit Wechselwirkung, 
                            d.h. der evt. Zusammenhang zwischen Größe und Gewicht wird evt. durch das Geschlecht morderiert.")),
