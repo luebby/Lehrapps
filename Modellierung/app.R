@@ -69,7 +69,7 @@ tabPanel("Stichprobe",
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Versuchen Sie verschiedene Stichprobenumfänge aus.")),
                fluidRow(column(12,"Wie stark variiert das Ergebnis?")),
-             fluidRow(column(12,"Wie stark weicht es vm Original ab?"))),
+             fluidRow(column(12,"Wie stark weicht es vom Original ab?"))),
              mainPanel(
                fluidRow(column(12, h3("Regression Stichprobe"))),
                fluidRow(column(12, plotlyOutput("PlotStipro"))),
