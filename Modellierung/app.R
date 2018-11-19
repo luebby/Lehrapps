@@ -28,6 +28,28 @@ xlim <- c(125,225)
 ylim <- c(40,160)
 
 ui <- navbarPage(title = "Modellierung",
+
+tabPanel("Hintergrund", 
+         fluidPage(
+           titlePanel("FOMshiny: Modellierung und Simulation"),
+           fluidRow(column(12, h3("Hintergrund"))),
+           fluidRow(column(12, "Das Gewicht variiert. Mancher wiegen 80kg, andere 60kg")),
+           fluidRow(column(12, "Hängt das vielleicht mit der Größe und dem Geschlecht zusammen?")),
+           fluidRow(column(12, "Dazu betrachten wir eine lineare Regression mit Wechselwirkung, 
+                           d.h. der evt. Zusammenhang zwischen Größe und Gewicht wird evt. durch das Geschlecht morderiert.")),
+           fluidRow(column(12, h3("Gesamtdatensatz"))),
+           fluidRow(column(12, "Hier sehen Sie die insgesamt zur Verfügung stehende Stichprobe.")),
+           fluidRow(column(12, h3("Stichprobe"))),
+           fluidRow(column(12, "Hier können Sie aus den zur Verfügung stehenden Daten den Vorgang des Stichprobenziehens simulieren 
+                           und das Ergebnis vergleichen.")),
+           fluidRow(column(12, h3("Resample"))),
+           fluidRow(column(12, "Hier können Sie das Re-Samplen simulieren und die Ergebnisse vergleichen.")),
+           fluidRow(column(12, h3("Permutation"))),
+           fluidRow(column(12, "Hier können Sie eine zufällige Zuordnung simulieren und Ergebnisse gemäß verschiedener
+                           Nullmodelle (kein Zusammenhang) vergleichen."))
+         )
+        ),
+                 
 tabPanel("Gesamtdatensatz", 
          fluidPage(
            titlePanel("Größe und Gewicht"),
@@ -81,7 +103,9 @@ tabPanel("Permutation",
                fluidRow(actionButton("ShuffleGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Wie verändern sich Achsenabschnitt und Steigung?")),
-               fluidRow(column(12,"Wie starkt variiert das Ergebnis?"))),
+               fluidRow(column(12,"Wie starkt variiert das Ergebnis?")),
+               fluidRow(column(12,"Gibt es zufällig signifikante Effekte?")),
+               fluidRow(column(12,"Welche Werte wurden vertauscht?"))),
              mainPanel(
                fluidRow(column(12, h3("Regression Permutation"))),
                fluidRow(column(12, plotlyOutput("PlotPermutation"))),
