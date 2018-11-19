@@ -48,7 +48,7 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Hier können Sie eine zufällige Zuordnung simulieren und Ergebnisse gemäß verschiedener
                            Nullmodelle (kein Zusammenhang) vergleichen.")),
            fluidRow(column(12, h3("Einfach Regression"))),
-           fluidRow(column(12, "Hier sehen Sie das Ergebnis wenn Sie nur die Größe als zur Modellierung des Gewichts heranziehen."))
+           fluidRow(column(12, "Hier sehen Sie das Ergebnis wenn Sie nur die Größe als Modellierung des Gewichts heranziehen."))
          )
         ),
                  
