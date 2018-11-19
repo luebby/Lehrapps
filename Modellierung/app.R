@@ -48,7 +48,7 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Hier können Sie eine zufällige Zuordnung simulieren und Ergebnisse gemäß verschiedener
                            Nullmodelle (kein Zusammenhang) vergleichen.")),
            fluidRow(column(12, h3("Einfach Regression"))),
-           fluidRow(column(12, "Hier sehen Sie das Ergebnis wenn Sie nur die Größe als Modellierung des Gewichts heranziehen."))
+           fluidRow(column(12, "Hier sehen Sie das Ergebnis wenn Sie nur die Größe bzw. nur das Geschlecht als Modellierung des Gewichts heranziehen."))
          )
         ),
                  
@@ -118,10 +118,12 @@ tabPanel("Permutation",
            ))),
 tabPanel("Einfache Regression", 
          fluidPage(
-           titlePanel("Größe und Gewicht"),
            fluidRow(column(12, h3("Regression Gesamtdatensatz: nur Größe und Gewicht"))),
            fluidRow(column(12, plotlyOutput("PlotTeil"))),
-           fluidRow(column(12, verbatimTextOutput("ErgTeil")))
+           fluidRow(column(12, verbatimTextOutput("ErgTeil"))),
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: nur Geschlecht und Gewicht"))),
+           fluidRow(column(12, plotlyOutput("PlotGeschlecht"))),
+           fluidRow(column(12, verbatimTextOutput("ErgGeschlecht")))
              )
            )
 )
@@ -224,6 +226,19 @@ server <- function(input, output) {
    
    output$ErgTeil <- renderPrint({
      summary(lm(Gewicht ~ Groesse, data = daten))
+   })
+   
+   output$PlotGeschlecht <- renderPlotly({
+     lmStipro <- lm(Gewicht ~ Geschlecht, data = daten)
+     plmorg <- gf_point(Gewicht ~ Geschlecht, col= ~ Geschlecht, data=daten,
+                        position = "jitter", width = 0.05, height = 0) %>%
+       gf_lims(y =ylim) %>%
+       gf_hline(yintercept = coef(lmStipro)[1], color = "red", alpha = 0.5) %>%
+       gf_hline(yintercept = coef(lmStipro)[1]+coef(lmStipro)[2], color = "blue", alpha = 0.5)
+     ggplotly(plmorg)
+   })   
+   output$ErgGeschlecht <- renderPrint({
+     summary(lm(Gewicht ~ Geschlecht, data = daten))
    })
    
    
