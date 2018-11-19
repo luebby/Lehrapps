@@ -46,13 +46,15 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Hier können Sie das Re-Samplen simulieren und die Ergebnisse vergleichen.")),
            fluidRow(column(12, h3("Permutation"))),
            fluidRow(column(12, "Hier können Sie eine zufällige Zuordnung simulieren und Ergebnisse gemäß verschiedener
-                           Nullmodelle (kein Zusammenhang) vergleichen."))
+                           Nullmodelle (kein Zusammenhang) vergleichen.")),
+           fluidRow(column(12, h3("Einfach Regression"))),
+           fluidRow(column(12, "Hier sehen Sie das Ergebnis wenn Sie nur die Größe als zur Modellierung des Gewichts heranziehen."))
          )
         ),
                  
 tabPanel("Gesamtdatensatz", 
          fluidPage(
-           titlePanel("Größe und Gewicht"),
+           titlePanel("Größe, Geschlecht und Gewicht"),
            fluidRow(column(12, h3("Regression Gesamtdatensatz"))),
            fluidRow(column(12, plotlyOutput("PlotOriginal"))),
            fluidRow(column(12, verbatimTextOutput("ErgOriginal"))),
@@ -113,7 +115,15 @@ tabPanel("Permutation",
                fluidRow(column(12, h3("Permutation"))),
                fluidRow(column(12, dataTableOutput("DatPermutation")))
              )
-           )))
+           ))),
+tabPanel("Einfache Regression", 
+         fluidPage(
+           titlePanel("Größe und Gewicht"),
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: nur Größe und Gewicht"))),
+           fluidRow(column(12, plotlyOutput("PlotTeil"))),
+           fluidRow(column(12, verbatimTextOutput("ErgTeil")))
+             )
+           )
 )
 
 
@@ -198,6 +208,22 @@ server <- function(input, output) {
    })
    output$ErgPermutation <- renderPrint({
      summary(lm(Gewicht ~ Groesse*Geschlecht, data = Shuffle()))
+   })
+   
+# Einfachregression
+
+   output$PlotTeil <- renderPlotly({
+     lmStipro <- lm(Gewicht ~ Groesse, data = daten)
+     plmorg <- gf_point(Gewicht ~ Groesse, data=daten) %>%
+       gf_lims(x = xlim, y =ylim) %>%
+       gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
+       gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
+       gf_abline(intercept = coef(lmStipro)[1], slope = coef(lmStipro)[2], color = "black", alpha = 0.8) 
+     ggplotly(plmorg)
+   })   
+   
+   output$ErgTeil <- renderPrint({
+     summary(lm(Gewicht ~ Groesse, data = daten))
    })
    
    
