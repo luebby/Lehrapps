@@ -36,9 +36,10 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Das Gewicht variiert. Manche wiegen 80kg, andere 60kg")),
            fluidRow(column(12, "Hängt das vielleicht mit der Größe und dem Geschlecht zusammen?")),
            fluidRow(column(12, "Dazu betrachten wir eine lineare Regression mit Wechselwirkung, 
-                           d.h. der evt. Zusammenhang zwischen Größe und Gewicht wird evt. durch das Geschlecht morderiert.")),
+                           d.h. der vermutete Zusammenhang zwischen Größe und Gewicht wird evtl. durch das Geschlecht moderiert.")),
            fluidRow(column(12, h3("Gesamtdatensatz"))),
-           fluidRow(column(12, "Hier sehen Sie die insgesamt zur Verfügung stehende Stichprobe.")),
+           fluidRow(column(12, "Hier sehen Sie die insgesamt zur Verfügung stehende Stichprobe. 
+                           Diese besteht aus n=121 Beobachtungen wurde im Rahmen diverser Vorlesungen anonym online erhoben.")),
            fluidRow(column(12, h3("Stichprobe"))),
            fluidRow(column(12, "Hier können Sie aus den zur Verfügung stehenden Daten den Vorgang des Stichprobenziehens simulieren 
                            und das Ergebnis vergleichen.")),
@@ -47,8 +48,9 @@ tabPanel("Hintergrund",
            fluidRow(column(12, h3("Permutation"))),
            fluidRow(column(12, "Hier können Sie eine zufällige Zuordnung simulieren und Ergebnisse gemäß verschiedener
                            Nullmodelle (kein Zusammenhang) vergleichen.")),
-           fluidRow(column(12, h3("Einfach Regression"))),
-           fluidRow(column(12, "Hier sehen Sie das Ergebnis wenn Sie nur die Größe bzw. nur das Geschlecht als Modellierung des Gewichts heranziehen."))
+           fluidRow(column(12, h3("Weitere Regressionsmodelle"))),
+           fluidRow(column(12, "Hier sehen Sie das Ergebnis, wenn Sie nur den Achsenabschnitt, nur die Größe bzw. nur das Geschlecht als Modellierung des Gewichts heranziehen.
+                           Auch das Ergebnis ohne Wechselwirkung wird gezeigt."))
          )
         ),
                  
@@ -66,7 +68,7 @@ tabPanel("Stichprobe",
          fluidPage(
            sidebarLayout(
              sidebarPanel(
-               fluidRow(sliderInput("Samplen", "Anzahl Beobachtungen", 5, 100, 50)),
+               fluidRow(sliderInput("Samplen", "Anzahl Beobachtungen", 2, 121, 50)),
                fluidRow(actionButton("SamplenGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Versuchen Sie verschiedene Stichprobenumfänge aus.")),
@@ -116,14 +118,20 @@ tabPanel("Permutation",
                fluidRow(column(12, dataTableOutput("DatPermutation")))
              )
            ))),
-tabPanel("Einfache Regression", 
+tabPanel("Weitere Regressionsmodelle", 
          fluidPage(
-           fluidRow(column(12, h3("Regression Gesamtdatensatz: nur Größe und Gewicht"))),
-           fluidRow(column(12, plotlyOutput("PlotTeil"))),
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: Gewicht~1"))),
+           fluidRow(column(12, plotOutput("PlotI"))),
+           fluidRow(column(12, verbatimTextOutput("ErgI"))),
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: Gewicht~Größe"))),
+           fluidRow(column(12, plotOutput("PlotTeil"))),
            fluidRow(column(12, verbatimTextOutput("ErgTeil"))),
-           fluidRow(column(12, h3("Regression Gesamtdatensatz: nur Geschlecht und Gewicht"))),
-           fluidRow(column(12, plotlyOutput("PlotGeschlecht"))),
-           fluidRow(column(12, verbatimTextOutput("ErgGeschlecht")))
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: Gewicht~Geschlecht"))),
+           fluidRow(column(12, plotOutput("PlotGeschlecht"))),
+           fluidRow(column(12, verbatimTextOutput("ErgGeschlecht"))),
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: Gewicht~Größe+Geschlecht"))),
+           fluidRow(column(12, plotOutput("PlotMain"))),
+           fluidRow(column(12, verbatimTextOutput("ErgMain")))
              )
            )
 )
@@ -214,33 +222,64 @@ server <- function(input, output) {
    
 # Einfachregression
 
-   output$PlotTeil <- renderPlotly({
+   output$PlotI <- renderPlot({
+     lmStipro <- lm(Gewicht ~ 1, data = daten)
+     plmorg <- gf_point(Gewicht ~ Groesse, data=daten) %>%
+       gf_lims(x = xlim, y =ylim) %>%
+       gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
+       gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
+       gf_abline(intercept = coef(lmStipro)[1], slope = 0, color = "black", alpha = 0.8) 
+    plmorg
+   })   
+   
+   output$ErgI <- renderPrint({
+     summary(lm(Gewicht ~ 1, data = daten))
+   })
+   
+   output$PlotTeil <- renderPlot({
      lmStipro <- lm(Gewicht ~ Groesse, data = daten)
      plmorg <- gf_point(Gewicht ~ Groesse, data=daten) %>%
        gf_lims(x = xlim, y =ylim) %>%
        gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
        gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
        gf_abline(intercept = coef(lmStipro)[1], slope = coef(lmStipro)[2], color = "black", alpha = 0.8) 
-     ggplotly(plmorg)
+    plmorg
    })   
    
    output$ErgTeil <- renderPrint({
      summary(lm(Gewicht ~ Groesse, data = daten))
    })
    
-   output$PlotGeschlecht <- renderPlotly({
+   output$PlotGeschlecht <- renderPlot({
      lmStipro <- lm(Gewicht ~ Geschlecht, data = daten)
      plmorg <- gf_point(Gewicht ~ Geschlecht, col= ~ Geschlecht, data=daten,
                         position = "jitter", width = 0.05, height = 0) %>%
        gf_lims(y =ylim) %>%
        gf_hline(yintercept = coef(lmStipro)[1], color = "red", alpha = 0.5) %>%
        gf_hline(yintercept = coef(lmStipro)[1]+coef(lmStipro)[2], color = "blue", alpha = 0.5)
-     ggplotly(plmorg)
+     plmorg
    })   
    output$ErgGeschlecht <- renderPrint({
      summary(lm(Gewicht ~ Geschlecht, data = daten))
    })
+
+   output$ErgTeil <- renderPrint({
+     summary(lm(Gewicht ~ Groesse, data = daten))
+   })
    
+   output$PlotMain <- renderPlot({
+     lmStipro <- lm(Gewicht ~ Groesse+Geschlecht, data = daten)
+     plmorg <- gf_point(Gewicht ~ Groesse, col= ~ Geschlecht, data=daten)%>%
+       gf_lims(x = xlim, y =ylim) %>%
+       gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
+       gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
+       gf_abline(intercept = coef(lmStipro)[1], slope = coef(lmStipro)[2], color = "red", alpha = 0.5) %>%
+       gf_abline(intercept = coef(lmStipro)[1]+coef(lmStipro)[3], slope = coef(lmStipro)[2], color = "blue", alpha = 0.5) 
+     plmorg
+   })   
+   output$ErgMain <- renderPrint({
+     summary(lm(Gewicht ~ Groesse+Geschlecht, data = daten))
+   })  
    
 }
 
