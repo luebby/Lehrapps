@@ -83,7 +83,7 @@ ui <- navbarPage(title = "Resampling",
                             titlePanel("Bootstrap Verteilung"),
                             fluidRow(column(12, h3("Bootstrap Verteilung Mittelwert"))),
                             fluidRow(column(12, plotOutput("PlotMeanDist"))),
-                            fluidRow(column(12, h3("Histogram Bootstrap Verteilung"))),
+                            fluidRow(column(12, h3("Histogramm Bootstrap Verteilung"))),
                             fluidRow(column(12, plotOutput("PlotMeanHist")))
                             )
                           )
@@ -183,7 +183,7 @@ res <- observe({
       gf_fitdistr(dist = "dnorm")}
   })
 }
-# run the app
-runApp(list(ui = ui, server = server))
+# Run the application 
+shinyApp(ui = ui, server = server)
 
 
