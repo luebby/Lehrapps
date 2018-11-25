@@ -78,7 +78,7 @@ ui <- navbarPage(title = "Permutation",
                           splitLayout(
                           fluidPage(
                             titlePanel("Permutation"),
-                            fluidRow(column(12, h3("Verteilung Permutierte Stichprobe"))),
+                            fluidRow(column(12, h3("Verteilung permutierte Stichprobe"))),
                             fluidRow(column(12, plotOutput("PlotDist"))),
                             fluidRow(column(12, h3("Verteilung Stichprobe"))),
                             fluidRow(column(12, plotOutput("PlotDistRes")))
