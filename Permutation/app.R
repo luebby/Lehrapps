@@ -173,7 +173,7 @@ res <- observe({
       # gf_lims(x=xlims_conf) %>%
       gf_labs(x="Differenz Mittelwerte") %>%
       gf_vline(xintercept = tail(werte$mean,1), col = "darkgreen" ) %>%
-      gf_vline(xintercept = 0, col = "darkgrey" ) %>%
+      gf_vline(xintercept = 0, col = "grey" ) %>%
       gf_vline(xintercept = datmeandiff, col = "black") %>%
       gf_theme(legend.position = "bottom")} %>%
       gf_refine(guides(fill=guide_legend(title="Abweichung größer als in Stichprobe?")))
