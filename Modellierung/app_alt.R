@@ -11,24 +11,21 @@ library(shiny)
 library(mosaic)
 library(plotly)
 library(DT)
-library(openintro)
 
+daten <- read.csv2("results-survey372953.csv", 
+                   fileEncoding = "UTF-8")
 
-data("marioKart")
-
-daten <- marioKart %>%
-  filter(totalPr <= 80) %>%
-  mutate(Zustand = case_when(cond=="new" ~ "neu",
-                             cond=="used" ~ "gebracht")) %>%
-  rename(Dauer=duration) %>%
-  rename(Preis=totalPr) %>%
-  select(Preis, Dauer, Zustand) %>%
+daten <- daten %>%
+  filter(Gewicht >= 50 & Gewicht <= 150) %>%
+  filter(Groesse >= 150 & Groesse <= 215) %>%
+  mutate(Geschlecht = case_when(Geschlecht=="Weiblich" ~ "Frau",
+                                Geschlecht=="Männlich" ~ "Mann")) %>%
   na.omit()
 
-lmorg <- lm(Preis ~ Dauer*Zustand, data = daten)
+lmorg <- lm(Gewicht ~ Groesse*Geschlecht, data = daten)
 
-xlim <- c(0,12)
-ylim <- c(25,80)
+xlim <- c(125,225)
+ylim <- c(40,160)
 
 ui <- navbarPage(title = "Modellierung",
 
@@ -36,15 +33,13 @@ tabPanel("Hintergrund",
          fluidPage(
            titlePanel("FOMshiny: Modellierung und Simulation"),
            fluidRow(column(12, h3("Hintergrund"))),
-           fluidRow(column(12, "Das Verkaufspreis einer ebay Auktion variiert. Manchmal beträgt er 30$, manchmal 60$.")),
-           fluidRow(column(12, "Hängt das vielleicht mit der Auktionsdauer und dem Zustand (neu/ gebraucht) zusammen?")),
+           fluidRow(column(12, "Das Gewicht variiert. Manche wiegen 80kg, andere 60kg")),
+           fluidRow(column(12, "Hängt das vielleicht mit der Größe und dem Geschlecht zusammen?")),
            fluidRow(column(12, "Dazu betrachten wir eine lineare Regression mit Wechselwirkung, 
-                           d.h. der vermutete Zusammenhang zwischen Dauer und Preis wird evtl. durch den Zustand moderiert.")),
+                           d.h. der vermutete Zusammenhang zwischen Größe und Gewicht wird evtl. durch das Geschlecht moderiert.")),
            fluidRow(column(12, h3("Gesamtdatensatz"))),
            fluidRow(column(12, "Hier sehen Sie die insgesamt zur Verfügung stehende Stichprobe. 
-                           Diese besteht aus n=141 Beobachtungen von Mario Kart für Nintendo Wii Auktionen im Oktober 2009.")),
-           fluidRow(column(12, "Die Daten stammen aus dem Datensatz marioKart aus dem R Paket openintro.")),
-           fluidRow(column(12, "Siehe auch http://www.openintro.org/.")),
+                           Diese besteht aus n=121 Beobachtungen wurde im Rahmen diverser Vorlesungen anonym online erhoben.")),
            fluidRow(column(12, h3("Stichprobe"))),
            fluidRow(column(12, "Hier können Sie aus den zur Verfügung stehenden Daten den Vorgang des Stichprobenziehens simulieren 
                            und das Ergebnis vergleichen.")),
@@ -54,14 +49,14 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Hier können Sie eine zufällige Zuordnung simulieren und Ergebnisse gemäß verschiedener
                            Nullmodelle (kein Zusammenhang) vergleichen.")),
            fluidRow(column(12, h3("Weitere Regressionsmodelle"))),
-           fluidRow(column(12, "Hier sehen Sie das Ergebnis, wenn Sie nur den Achsenabschnitt, nur die Dauer bzw. nur den Zustand als Modellierung des Preises heranziehen.
+           fluidRow(column(12, "Hier sehen Sie das Ergebnis, wenn Sie nur den Achsenabschnitt, nur die Größe bzw. nur das Geschlecht als Modellierung des Gewichts heranziehen.
                            Auch das Ergebnis ohne Wechselwirkung wird gezeigt."))
          )
         ),
                  
 tabPanel("Gesamtdatensatz", 
          fluidPage(
-           titlePanel("Dauer, Zustand und Preis"),
+           titlePanel("Größe, Geschlecht und Gewicht"),
            fluidRow(column(12, h3("Regression Gesamtdatensatz"))),
            fluidRow(column(12, plotlyOutput("PlotOriginal"))),
            fluidRow(column(12, verbatimTextOutput("ErgOriginal"))),
@@ -73,7 +68,7 @@ tabPanel("Stichprobe",
          fluidPage(
            sidebarLayout(
              sidebarPanel(
-               fluidRow(sliderInput("Samplen", "Anzahl Beobachtungen", 2, 141, 50)),
+               fluidRow(sliderInput("Samplen", "Anzahl Beobachtungen", 2, 121, 50)),
                fluidRow(actionButton("SamplenGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Versuchen Sie verschiedene Stichprobenumfänge aus.")),
@@ -108,7 +103,7 @@ tabPanel("Permutation",
          fluidPage(
            sidebarLayout(
              sidebarPanel(
-               fluidRow(radioButtons("Shufflen", "Welche Variable soll permutiert werden?", c("Preis", "Dauer", "Zustand"))),
+               fluidRow(radioButtons("Shufflen", "Welche Variable soll permutiert werden?", c("Gewicht", "Größe", "Geschlecht"))),
                fluidRow(actionButton("ShuffleGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Wie verändern sich Achsenabschnitt und Steigung?")),
@@ -125,16 +120,16 @@ tabPanel("Permutation",
            ))),
 tabPanel("Weitere Regressionsmodelle", 
          fluidPage(
-           fluidRow(column(12, h3("Regression Gesamtdatensatz: Preis~1"))),
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: Gewicht~1"))),
            fluidRow(column(12, plotOutput("PlotI"))),
            fluidRow(column(12, verbatimTextOutput("ErgI"))),
-           fluidRow(column(12, h3("Regression Gesamtdatensatz: Preis~Dauer"))),
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: Gewicht~Größe"))),
            fluidRow(column(12, plotOutput("PlotTeil"))),
            fluidRow(column(12, verbatimTextOutput("ErgTeil"))),
-           fluidRow(column(12, h3("Regression Gesamtdatensatz: Preis~Zustand"))),
-           fluidRow(column(12, plotOutput("PlotZustand"))),
-           fluidRow(column(12, verbatimTextOutput("ErgZustand"))),
-           fluidRow(column(12, h3("Regression Gesamtdatensatz: Preis~Dauer+Zustand"))),
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: Gewicht~Geschlecht"))),
+           fluidRow(column(12, plotOutput("PlotGeschlecht"))),
+           fluidRow(column(12, verbatimTextOutput("ErgGeschlecht"))),
+           fluidRow(column(12, h3("Regression Gesamtdatensatz: Gewicht~Größe+Geschlecht"))),
            fluidRow(column(12, plotOutput("PlotMain"))),
            fluidRow(column(12, verbatimTextOutput("ErgMain")))
              )
@@ -150,7 +145,7 @@ server <- function(input, output) {
   
    output$DatOriginal <- renderDataTable(daten)
    output$PlotOriginal <- renderPlotly({
-     plmorg <- gf_point(Preis ~ Dauer, col = ~ Zustand, data=daten) %>%
+     plmorg <- gf_point(Gewicht ~ Groesse, col = ~ Geschlecht, data=daten) %>%
        gf_lims(x = xlim, y =ylim) %>%
        gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.5) %>%
        gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.5) 
@@ -167,8 +162,8 @@ server <- function(input, output) {
    
    output$DatStipro <- renderDataTable(Stipro())
    output$PlotStipro <- renderPlotly({
-     lmStipro <- lm(Preis ~ Dauer*Zustand, data = Stipro())
-     plmorg <- gf_point(Preis ~ Dauer, col = ~Zustand, data=Stipro()) %>%
+     lmStipro <- lm(Gewicht ~ Groesse*Geschlecht, data = Stipro())
+     plmorg <- gf_point(Gewicht ~ Groesse, col = ~Geschlecht, data=Stipro()) %>%
        gf_lims(x = xlim, y =ylim) %>%
        gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
        gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
@@ -177,7 +172,7 @@ server <- function(input, output) {
      ggplotly(plmorg)
    })
    output$ErgStipro <- renderPrint({
-     summary(lm(Preis ~ Dauer*Zustand, data = Stipro()))
+     summary(lm(Gewicht ~ Groesse*Geschlecht, data = Stipro()))
    })
    
    
@@ -187,8 +182,8 @@ server <- function(input, output) {
    
    output$DatResample <- renderDataTable(Resample())
    output$PlotResample <- renderPlotly({
-     lmStipro <- lm(Preis ~ Dauer*Zustand, data = Resample())
-     plmorg <- gf_point(Preis ~ Dauer, col = ~Zustand, data=Resample()) %>%
+     lmStipro <- lm(Gewicht ~ Groesse*Geschlecht, data = Resample())
+     plmorg <- gf_point(Gewicht ~ Groesse, col = ~Geschlecht, data=Resample()) %>%
        gf_lims(x = xlim, y =ylim) %>%
        gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
        gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
@@ -197,23 +192,23 @@ server <- function(input, output) {
      ggplotly(plmorg)
    })
    output$ErgResample <- renderPrint({
-     summary(lm(Preis ~ Dauer*Zustand, data = Resample()))
+     summary(lm(Gewicht ~ Groesse*Geschlecht, data = Resample()))
    })
    
    
    # Permutation
    
    Shuffle <- eventReactive(input$ShuffleGo, { 
-                              if (input$Shufflen=="Dauer") daten_perm <- sample(daten, shuffled="Dauer")
-                              if (input$Shufflen=="Preis") daten_perm <- sample(daten, shuffled="Preis")
-                              if (input$Shufflen=="Zustand") daten_perm <- sample(daten, shuffled="Zustand")
+                              if (input$Shufflen=="Größe") daten_perm <- sample(daten, shuffled="Groesse")
+                              if (input$Shufflen=="Gewicht") daten_perm <- sample(daten, shuffled="Gewicht")
+                              if (input$Shufflen=="Geschlecht") daten_perm <- sample(daten, shuffled="Geschlecht")
                               daten_perm
                             })
    
    output$DatPermutation <- renderDataTable(Shuffle())
    output$PlotPermutation <- renderPlotly({
-     lmStipro <- lm(Preis ~ Dauer*Zustand, data = Shuffle())
-     plmorg <- gf_point(Preis ~ Dauer, col = ~Zustand, data=Shuffle()) %>%
+     lmStipro <- lm(Gewicht ~ Groesse*Geschlecht, data = Shuffle())
+     plmorg <- gf_point(Gewicht ~ Groesse, col = ~Geschlecht, data=Shuffle()) %>%
        gf_lims(x = xlim, y =ylim) %>%
        gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
        gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
@@ -222,14 +217,14 @@ server <- function(input, output) {
      ggplotly(plmorg)
    })
    output$ErgPermutation <- renderPrint({
-     summary(lm(Preis ~ Dauer*Zustand, data = Shuffle()))
+     summary(lm(Gewicht ~ Groesse*Geschlecht, data = Shuffle()))
    })
    
 # Einfachregression
 
    output$PlotI <- renderPlot({
-     lmStipro <- lm(Preis ~ 1, data = daten)
-     plmorg <- gf_point(Preis ~ Dauer, data=daten) %>%
+     lmStipro <- lm(Gewicht ~ 1, data = daten)
+     plmorg <- gf_point(Gewicht ~ Groesse, data=daten) %>%
        gf_lims(x = xlim, y =ylim) %>%
        gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
        gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
@@ -238,12 +233,12 @@ server <- function(input, output) {
    })   
    
    output$ErgI <- renderPrint({
-     summary(lm(Preis ~ 1, data = daten))
+     summary(lm(Gewicht ~ 1, data = daten))
    })
    
    output$PlotTeil <- renderPlot({
-     lmStipro <- lm(Preis ~ Dauer, data = daten)
-     plmorg <- gf_point(Preis ~ Dauer, data=daten) %>%
+     lmStipro <- lm(Gewicht ~ Groesse, data = daten)
+     plmorg <- gf_point(Gewicht ~ Groesse, data=daten) %>%
        gf_lims(x = xlim, y =ylim) %>%
        gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
        gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
@@ -252,29 +247,29 @@ server <- function(input, output) {
    })   
    
    output$ErgTeil <- renderPrint({
-     summary(lm(Preis ~ Dauer, data = daten))
+     summary(lm(Gewicht ~ Groesse, data = daten))
    })
    
-   output$PlotZustand <- renderPlot({
-     lmStipro <- lm(Preis ~ Zustand, data = daten)
-     plmorg <- gf_point(Preis ~ Zustand, col= ~ Zustand, data=daten,
+   output$PlotGeschlecht <- renderPlot({
+     lmStipro <- lm(Gewicht ~ Geschlecht, data = daten)
+     plmorg <- gf_point(Gewicht ~ Geschlecht, col= ~ Geschlecht, data=daten,
                         position = "jitter", width = 0.05, height = 0) %>%
        gf_lims(y =ylim) %>%
        gf_hline(yintercept = coef(lmStipro)[1], color = "red", alpha = 0.5) %>%
        gf_hline(yintercept = coef(lmStipro)[1]+coef(lmStipro)[2], color = "blue", alpha = 0.5)
      plmorg
    })   
-   output$ErgZustand <- renderPrint({
-     summary(lm(Preis ~ Zustand, data = daten))
+   output$ErgGeschlecht <- renderPrint({
+     summary(lm(Gewicht ~ Geschlecht, data = daten))
    })
 
    output$ErgTeil <- renderPrint({
-     summary(lm(Preis ~ Dauer, data = daten))
+     summary(lm(Gewicht ~ Groesse, data = daten))
    })
    
    output$PlotMain <- renderPlot({
-     lmStipro <- lm(Preis ~ Dauer+Zustand, data = daten)
-     plmorg <- gf_point(Preis ~ Dauer, col= ~ Zustand, data=daten)%>%
+     lmStipro <- lm(Gewicht ~ Groesse+Geschlecht, data = daten)
+     plmorg <- gf_point(Gewicht ~ Groesse, col= ~ Geschlecht, data=daten)%>%
        gf_lims(x = xlim, y =ylim) %>%
        gf_abline(intercept = coef(lmorg)[1], slope = coef(lmorg)[2], color = "red", alpha = 0.2) %>%
        gf_abline(intercept = coef(lmorg)[1]+coef(lmorg)[3], slope = coef(lmorg)[2]+coef(lmorg)[4], color = "blue", alpha = 0.2) %>%
@@ -283,7 +278,7 @@ server <- function(input, output) {
      plmorg
    })   
    output$ErgMain <- renderPrint({
-     summary(lm(Preis ~ Dauer+Zustand, data = daten))
+     summary(lm(Gewicht ~ Groesse+Geschlecht, data = daten))
    })  
    
 }
