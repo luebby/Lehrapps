@@ -40,6 +40,7 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Hängt das vielleicht mit der Auktionsdauer und dem Zustand (neu/ gebraucht) zusammen?")),
            fluidRow(column(12, "Dazu betrachten wir eine lineare Regression mit Wechselwirkung, 
                            d.h. der vermutete Zusammenhang zwischen Dauer und Preis wird evtl. durch den Zustand moderiert.")),
+           fluidRow(column(12, "Beachten Sie bitte das wichtige Kovariablen wie Ausstattungsmerkmale etc. hier nicht berücksichtigt werden.")),
            fluidRow(column(12, h3("Gesamtdatensatz"))),
            fluidRow(column(12, "Hier sehen Sie die insgesamt zur Verfügung stehende Stichprobe. 
                            Diese besteht aus n=141 Beobachtungen von Mario Kart für Nintendo Wii Auktionen im Oktober 2009.")),
