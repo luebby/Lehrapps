@@ -73,7 +73,7 @@ Stipro <- eventReactive(input$SamplenGo, {
      gf_dhistogram(~ x, fill = ~Gruppe,
                 alpha = 0.2, data = daten,
                 title = paste0(" Differnz Mittelwerte: ", round(diffmean(x~Gruppe, data = daten),2), 
-                               ", Effektgröße Cohen's D: ",round(cohensD(x~Gruppe, data = daten),2))) %>%
+                               ", Effektgröße Cohens d: ",round(cohensD(x~Gruppe, data = daten),2))) %>%
        gf_lims(x=xlim) %>%
        gf_fitdistr(dist = "dnorm", col=~Gruppe)
        
