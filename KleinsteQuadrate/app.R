@@ -108,7 +108,8 @@ server <- function(input, output) {
   
   
   output$PlotOls <- renderPlot({
-    plotModel(lm.ols)
+    gf_point(Preis  ~ Steuer, data = daten.org) %>%
+      gf_abline(intercept = coef(lm.ols)[1], slope = coef(lm.ols)[2], color = "blue")
     }) 
   
   output$ErgOls <- renderPrint({
