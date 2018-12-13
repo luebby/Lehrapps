@@ -39,7 +39,7 @@ tabPanel("Normalverteilung",
                fluidRow(numericInput("sd", "Standardabweichung", value = 15, min = 0)),
                fluidRow(column(12, h4("x bzw. p"))),
                fluidRow(numericInput("q", "Wert x", value = 115)),
-               fluidRow(numericInput("p", "Anteil p", value = 0.9, min=0, max=1))),
+               fluidRow(numericInput("p", "Anteil p", value = 0.9, min=0, max=1, step=0.01))),
              mainPanel(
                fluidRow(column(12, h3("Verteilungsfunktion"))),
                fluidRow(column(12, plotOutput("Plotpnorm"))),
@@ -55,11 +55,11 @@ tabPanel("Binomialverteilung",
            sidebarLayout(
              sidebarPanel(
                fluidRow(column(12, h4("Parameter"))),
-               fluidRow(numericInput("pi", "Erfolgswahrscheinlichkeit pi", value = 1/3, min=0.01, max=0.99)),
-               fluidRow(numericInput("n", "Anzahl Beobachtungen", value = 32, min = 1)),
+               fluidRow(numericInput("pi", "Erfolgswahrscheinlichkeit pi", value = 1/3, min=0.001, max=0.999, step=0.01)),
+               fluidRow(numericInput("n", "Anzahl Beobachtungen", value = 34, min = 1)),
                fluidRow(column(12, h4("x bzw. p"))),
                fluidRow(numericInput("q2", "Wert x", value = 12)),
-               fluidRow(numericInput("p2", "Anteil p", value = 0.9, min=0, max=1))),
+               fluidRow(numericInput("p2", "Anteil p", value = 0.9, min=0, max=1, step = 0.01))),
              mainPanel(
                fluidRow(column(12, h3("Verteilungsfunktion"))),
                fluidRow(column(12, plotOutput("Plotpbinom"))),
