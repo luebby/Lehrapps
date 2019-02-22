@@ -54,6 +54,8 @@ tabPanel("Hintergrund",
            fluidRow(column(12, h3("Permutation"))),
            fluidRow(column(12, "Hier können Sie eine zufällige Zuordnung simulieren und Ergebnisse gemäß verschiedener
                            Nullmodelle (kein Zusammenhang) vergleichen.")),
+           fluidRow(column(12, "Achtung: durch Permutation einer einzelnen erklärenden Variable x wird auch der mögliche Zusammenhang 
+                           mit den anderen erklärenden Variablen zerstört.")),
            fluidRow(column(12, h3("Weitere Regressionsmodelle"))),
            fluidRow(column(12, "Hier sehen Sie das Ergebnis, wenn Sie nur den Achsenabschnitt, nur die Dauer bzw. nur den Zustand als Modellierung des Preises heranziehen.
                            Auch das Ergebnis ohne Wechselwirkung wird gezeigt."))
@@ -115,7 +117,9 @@ tabPanel("Permutation",
                fluidRow(column(12,"Wie verändern sich Achsenabschnitt und Steigung?")),
                fluidRow(column(12,"Wie starkt variiert das Ergebnis?")),
                fluidRow(column(12,"Gibt es zufällig signifikante Effekte?")),
-               fluidRow(column(12,"Welche Werte wurden vertauscht?"))),
+               fluidRow(column(12,"Welche Werte wurden vertauscht?")),
+               fluidRow(column(12,"Hinweis: Bei Permutation einer erklärenden wird ein möglicher Zusammenhang 
+                               mit den anderen erklärenden Variablen ebenfalls zerstört."))),
              mainPanel(
                fluidRow(column(12, h3("Regression Permutation"))),
                fluidRow(column(12, plotlyOutput("PlotPermutation"))),
