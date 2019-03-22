@@ -39,9 +39,9 @@ tabPanel("Mittelwertsvergleich",
                fluidRow(sliderInput("n", "Beobachtungen (n)", 20, 200, 50, 10)),
                fluidRow(actionButton("SamplenGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
-               fluidRow(column(12,"Versuchen Sie verschiedene Mittelwerte der Population für B aus.")),
-               fluidRow(column(12,"Versuchen Sie verschiedene Streuungen aus.")),
-               fluidRow(column(12,"Versuchen Sie verschiedene Stichprobenumfänge aus.")),
+               fluidRow(column(12,"Probieren Sie verschiedene Mittelwerte der Population für B aus.")),
+               fluidRow(column(12,"Probieren Sie verschiedene Streuungen aus.")),
+               fluidRow(column(12,"Probieren Sie verschiedene Stichprobenumfänge aus.")),
                fluidRow(column(12,"Wie stark variieren welche Ergebnisse?"))
                ),
              mainPanel(
