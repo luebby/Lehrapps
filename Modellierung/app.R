@@ -36,10 +36,10 @@ tabPanel("Hintergrund",
          fluidPage(
            titlePanel("FOMshiny: Modellierung und Simulation"),
            fluidRow(column(12, h3("Hintergrund"))),
-           fluidRow(column(12, "Das Verkaufspreis einer ebay Auktion variiert. Manchmal beträgt er 30$, manchmal 60$.")),
+           fluidRow(column(12, "Der Verkaufspreis einer ebay Auktion variiert. Manchmal beträgt er 30$, manchmal 60$.")),
            fluidRow(column(12, "Hängt das vielleicht mit der Auktionsdauer und dem Zustand (neu/ gebraucht) zusammen?")),
            fluidRow(column(12, "Dazu betrachten wir eine lineare Regression mit Wechselwirkung, 
-                           d.h. der vermutete Zusammenhang zwischen Dauer und Preis wird evtl. durch den Zustand moderiert.")),
+                           d.h. der vermutete Zusammenhang zwischen Dauer und Preis wird evtl. durch den Zustand modelliert.")),
            fluidRow(column(12, "Beachten Sie bitte das wichtige Kovariablen wie Ausstattungsmerkmale etc. hier nicht berücksichtigt werden.")),
            fluidRow(column(12, h3("Gesamtdatensatz"))),
            fluidRow(column(12, "Hier sehen Sie die insgesamt zur Verfügung stehende Stichprobe. 
@@ -76,10 +76,10 @@ tabPanel("Stichprobe",
          fluidPage(
            sidebarLayout(
              sidebarPanel(
-               fluidRow(sliderInput("Samplen", "Anzahl Beobachtungen", 2, 141, 50)),
-               fluidRow(actionButton("SamplenGo", "Los!")),
+               fluidRow(sliderInput("Sampeln", "Anzahl Beobachtungen", 2, 141, 50)),
+               fluidRow(actionButton("SampelnGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
-               fluidRow(column(12,"Versuchen Sie verschiedene Stichprobenumfänge aus.")),
+               fluidRow(column(12,"Probieren Sie verschiedene Stichprobenumfänge aus.")),
                fluidRow(column(12,"Wie stark variiert das Ergebnis?")),
              fluidRow(column(12,"Wie stark weicht es vom Original ab?"))),
              mainPanel(
@@ -94,7 +94,7 @@ tabPanel("Resample",
          fluidPage(
            sidebarLayout(
              sidebarPanel(
-               fluidRow(actionButton("ResamplenGo", "Los!")),
+               fluidRow(actionButton("ResampelnGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Wie stark variiert das Ergebnis?")),
                fluidRow(column(12,"Wie stark weicht es vom Original ab?")),
