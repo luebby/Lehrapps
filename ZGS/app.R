@@ -22,14 +22,14 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Warum?")),
            fluidRow(column(12, "Sie entsteht z.B. häufig als (asymptotische, approximative) Grenzverteilung, wenn man viele Zufallsvariablen addiert.")),
            fluidRow(column(12, "Dieses Phänomen nennt man auch Zentraler Grenzwertsatz.")),
-           fluidRow(column(12, h4("Entstehung Normalverteilung"))),
+           fluidRow(column(12, h4("Annäherung Normalverteilung"))),
            fluidRow(column(12, "Z.B. ist das Ergebnis eines Münzwurfs zufällig, die Variable X: *Anzahl Kopf* ist damit eine Zufallsvariable.")),
            fluidRow(column(12, "Wirft man einmal, so hat man mit einer Wahrscheinlichkeit von 1/2 Kopf, mit 1/2 Zahl.")),
            fluidRow(column(12, "Wirft man zweimal, so ist die Wahrscheinlichkeit für 0x Kopf 1/4, für 1x Kopf 1/2 und für 2x Kopf 1/4.")),  
            fluidRow(column(12, "Wie entwickelt sich die Verteilung von der Anzahl Kopf (einer Summe!), wenn die Münze immer öfter geworfen wird?"))
       )),
                  
-tabPanel("Entstehung Normalverteilung", 
+tabPanel("Annäherung Normalverteilung", 
          fluidPage(
            fluidRow(sliderInput("n", "Anzahl Münzwürfe", value = 1, min=1, max=300, step=1, animate = TRUE)),
            fluidRow(plotOutput("Plotpbinom"))
