@@ -1,5 +1,5 @@
 # ===========================================================================
-# app.R (Release 0.1)
+# app.R (Release 0.2)
 # =====----------------------------------------------------------------------
 #
 # Bisektionsverfahren
@@ -8,6 +8,7 @@
 # (W) by Norman Markgraf in 2019
 #
 # 30. Mrz. 2019  (nm)  Allererste Version (0.1)
+# 05. Apr. 2019  (nm)  Man lernt stetig dazu (0.2)
 #
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
@@ -42,8 +43,10 @@ library(mosaic)
 library(mosaicCalc)
 library(xtable)
 
-fkttab <<- data.frame(integer(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric())
-names(fkttab) = c("iter","a", "c", "b", "f(a)", "f(c)", "f(b)", "f(a)*f(c)", "|a-b|", "|f(a)-f(b)|")
+#fkttab <<- data.frame(integer(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric())
+#names(fkttab) = c("iter","a", "c", "b", "f(a)", "f(c)", "f(b)", "f(a)*f(c)", "|a-b|", "|f(a)-f(b)|")
+
+fkttab <<- tribble(~"a", ~"c", ~"b", ~"f(a)", ~"f(c)", ~"f(b)", ~"f(a)*f(c)", ~"|a-b|", ~"|f(a)-f(b)|")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -62,7 +65,10 @@ ui <- fluidPage(
          
          numericInput("b", "b=",  1.0, min= -10, max = 10),
          
-         submitButton("Aktualisieren", icon("refresh")),
+         numericInput("eps", "eps=", 5*10^-4, min=1*10^-10, max=0.1),
+         
+#        submitButton("Aktualisieren", icon("refresh")),
+         actionButton(inputId="update", label="Aktualisieren", icon=icon("refresh")),
          helpText("Aktualisieren der Ausgaben")
          #submitButton("Reset", icon("caret-square-up")),
          #helpText("Reset der Ausgaben")
@@ -79,55 +85,70 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
  server <- function(input, output, session) {
-     
-    observeEvent(input$Reset, {
-            #fkttab <<- data.frame(integer(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric())
-            #names(fkttab) = c("iter","a", "c", "b", "f(a)", "f(c)", "f(b)", "f(a)*f(c)")
-            
-            print("RESET!")
-            
-            updateTextInput(session, "fkt", value = "(x-0.9)^2-1")
-            updateNumericInput(session, "a", value = -1)
-            updateNumericInput(session, "b", value = 1)
-    })
-   
+
+   rv <- reactiveValues(
+     a=NULL, 
+     b=NULL,
+     c=NULL,
+     df=tribble(~"a", ~"c", ~"b", ~"f(a)", ~"f(c)", ~"f(b)", ~"f(a)*f(c)", ~"|a-b|", ~"|f(a)-f(b)|")
+     )     
+
+   observeEvent(input$update, {
+      fkt <- makeFun( as.formula(paste(input$fkt, "~ x")))
+      if (is.null(rv$a) | is.null(rv$b)) {
+        rv$a <- input$a
+        rv$b <- input$b
+        rv$c <- (rv$a + rv$b)/2
+      } else {
+        if (rv$a > rv$b) { t <- rv$a; rv$a <- rv$b; rv$b <- rv$a}
+        
+        rv$c <- (rv$a + rv$b)/2
+        
+        fac = fkt(rv$a)*fkt(rv$c)
+        old_a <- rv$a
+        old_b <- rv$b
+        if (fac < 0) {
+          rv$b <- rv$c
+        } else {
+          rv$a <- rv$c
+        }
+      }
+      if (abs(fkt(rv$b)-fkt(rv$a)) > input$eps/2) {
+        rv$df <- add_row( rv$df,
+          a=rv$a,
+          c=rv$c,
+          b=rv$b,
+          "f(a)"=fkt(rv$a),
+          "f(c)"=fkt(rv$c),
+          "f(b)"=fkt(rv$b),
+          "f(a)*f(c)"=fkt(rv$a)*fkt(rv$c),
+          "|a-b|"=abs(rv$a-rv$b),
+          "|f(a)-f(b)|"=abs(fkt(rv$a)-fkt(rv$b))
+        )
+      } else {
+       rv$a <- old_a
+       rv$b <- old_b
+       rv$c <- (rv$a + rv$b)/2
+      }
+   })
      
    output$functionTable <- renderTable({
-       input$nextStep
-       
-       a <- input$a
-       b <- input$b
-       c <- (a+b)/2
-       fkt <- makeFun( as.formula(paste(input$fkt, "~ x")))
-       
-       df = data.frame(
-           iter=ifelse(max(fkttab$iter) < 0, 1, as.integer(trunc(max(fkttab$iter))+1)),
-           a=a,
-           c=c,
-           b=b,
-           fa=fkt(a),
-           fc=fkt(c),
-           fb=fkt(b),
-           fac=fkt(a)*fkt(c),
-           amb=abs(a-b),
-           fab=abs(fkt(a)-fkt(b))
-       )
-       names(df) = c("iter", "a", "c", "b", "f(a)", "f(c)", "f(b)", "f(a)*f(c)", "|a-b|", "|f(a)-f(b)|")
-       fkttab <<- bind_rows(fkttab, df)
-       fkttab
+     tibble::rowid_to_column(as.data.frame(rv$df))
    },
    align = "r",
-   digits=4,
-   display = c("d","d","G","G","G","G","G","G","G","G","G")
+   digits = 4,
+   display = rep("G", 11)
    )
     
    output$functionPlot <- renderPlot({
-       input$nextStep
-       
+     if (is.null(rv$a) | is.null(rv$b)) {
        a <- input$a
        b <- input$b
-       if (a>b) { t <- a; a <- b; b <- a}
-       c <- (a+b)/2
+     } else {
+     a <- rv$a
+     b <- rv$b
+     }
+     c <- (a+b)/2
        # 
        m <- round(log(abs(b-a))/log(10))-1
        
