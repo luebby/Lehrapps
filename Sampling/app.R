@@ -10,6 +10,7 @@
 library(shiny)
 library(mosaic)
 library(nycflights13)
+library(shinycssloaders)
 data(flights)
 
 
@@ -56,9 +57,9 @@ ui <- navbarPage(title = "Sampling",
                           fluidPage(
                             titlePanel("Verteilung Population"),
                             fluidRow(column(12, h3("Verteilung Entfernung"))),
-                            fluidRow(column(12, plotOutput("PlotOriginalEnt"))),
+                            fluidRow(column(12, plotOutput("PlotOriginalEnt") %>% withSpinner(color = '#387F72'))),
                             fluidRow(column(12, h3("Verteilung Verspätung"))),
-                            fluidRow(column(12, plotOutput("PlotOriginalVer")))
+                            fluidRow(column(12, plotOutput("PlotOriginalVer") %>% withSpinner(color = '#387F72')))
                           )
                  ),
                  
@@ -141,14 +142,29 @@ res500 <- observe({
     if (input$SampleGo50) {
       gf_histogram( ~ Entfernung, data = werte50$sam50,
                     title = paste0(" Mittelwert Entfernung: ", round(tail(werte50$Ent50,1),2)),
-                    binwidth = 250) %>%
-        gf_lims(x = xlims)}
-    })
+                    binwidth = 250,
+                    color = 'white',
+                    fill = '#387F72',
+                    alpha = .5) %>%
+      gf_lims(x = xlims) %>%
+      gf_refine(scale_x_continuous(limits = xlims, breaks = seq(xlims[1],xlims[2],250))) %>%
+      gf_labs(x = 'Entfernung',
+              y = 'Anzahl Flüge') %>%
+      gf_theme(theme = theme_bw())
+    }
+  })
   
   output$PlotVer50 <- renderPlot({
     if (input$SampleGo50) {
       gf_bar( ~ Verspätet, data = werte50$sam50 ,
-              title = paste0(" Anteil Verspätet: ", round(tail(werte50$Ver50,1),2)))}
+              title = paste0(" Anteil Verspätet: ", round(tail(werte50$Ver50,1),2)),
+              color = 'white',
+              fill = '#387F72',
+              alpha = .5) %>%
+      gf_labs(x = 'Verspätung',
+              y = 'Anzahl Flüge') %>%
+      gf_theme(theme = theme_bw())
+    }
   })
   
   
@@ -156,26 +172,54 @@ res500 <- observe({
     if (input$SampleGo500) {
       gf_histogram( ~ Entfernung, data = werte500$sam500,
                     title = paste0(" Mittelwert Entfernung: ", round(tail(werte500$Ent500,1),2)),
-                    binwidth = 250) %>%
-        gf_lims(x = xlims)}
+                    binwidth = 250,
+                    color = 'white',
+                    fill = '#387F72',
+                    alpha = .5) %>%
+        gf_lims(x = xlims) %>%
+        gf_refine(scale_x_continuous(limits = xlims, breaks = seq(xlims[1],xlims[2],250))) %>%
+        gf_labs(x = 'Entfernung',
+                y = 'Anzahl Flüge') %>%
+        gf_theme(theme = theme_bw())
+    }
   })
   
   output$PlotVer500 <- renderPlot({
     if (input$SampleGo500) {
       gf_bar( ~ Verspätet, data = werte500$sam500 ,
-              title = paste0(" Anteil Verspätet: ", round(tail(werte500$Ver500,1),2)))}
+              title = paste0(" Anteil Verspätet: ", round(tail(werte500$Ver500,1),2)),
+              color = 'white',
+              fill = '#387F72',
+              alpha = .5) %>%
+      gf_labs(x = 'Verspätung',
+              y = 'Anzahl Flüge') %>%
+      gf_theme(theme = theme_bw())
+    }
   })
 
   output$PlotOriginalEnt <- renderPlot({
     gf_histogram( ~ Entfernung, data = flights,
                   title = paste0(" Mittelwert Entfernung: ", round(entpop,2)),
-                  binwidth = 250) %>%
-      gf_lims(x = xlims)
+                  binwidth = 250,
+                  color = 'white',
+                  fill = '#387F72',
+                  alpha = .5) %>%
+    gf_lims(x = xlims) %>%
+    gf_refine(scale_x_continuous(limits = xlims, breaks = seq(xlims[1],xlims[2],250))) %>%
+    gf_labs(x = 'Entfernung',
+            y = 'Anzahl Flüge') %>%
+    gf_theme(theme = theme_bw())
   })
   
   output$PlotOriginalVer <- renderPlot({
     gf_bar( ~ Verspätet, data = flights,
-            title = paste0(" Anteil Verspätet: ", round(verpop,2)))
+            title = paste0(" Anteil Verspätet: ", round(verpop,2)),
+            color = 'white',
+            fill = '#387F72',
+            alpha = .5) %>%
+    gf_labs(x = 'Verspätung',
+            y = 'Anzahl Flüge') %>%
+    gf_theme(theme = theme_bw())
   })
   
 
@@ -183,36 +227,60 @@ res500 <- observe({
     if (input$SampleGo50) {
       gf_dotplot( ~ x, data=data.frame(x=werte50$Ent50),
                   title = paste0("Anzahl Stichproben: ",length(werte50$Ent50), 
-                                 ", Standardfehler: ", round(sd(werte50$Ent50),2))) %>%
-        gf_vline(xintercept = tail(werte50$Ent50,1), col = "red" ) %>%
-        gf_vline(xintercept = entpop, col = "blue")}
+                                 ", Standardfehler: ", round(sd(werte50$Ent50),2)),
+                  color = '#12342E',
+                  fill = '#387F72') %>%
+      gf_vline(xintercept = tail(werte50$Ent50,1), col = "red" ) %>%
+      gf_vline(xintercept = entpop, col = "blue") %>%
+      gf_labs(x = 'Mittelwert Entfernung',
+              y = 'Häufigkeit') %>%
+      gf_theme(theme = theme_bw())
+    }
   })
   
   output$PlotMeanVer50 <- renderPlot({
     if (input$SampleGo50) {
       gf_dotplot( ~ x, data=data.frame(x=werte50$Ver50),
                   title = paste0("Anzahl Stichproben: ",length(werte50$Ver50), 
-                                 ", Standardfehler: ", round(sd(werte50$Ver50),2))) %>%
-        gf_vline(xintercept = tail(werte50$Ver50,1), col = "red") %>%
-        gf_vline(xintercept = verpop, col = "blue")}
+                                 ", Standardfehler: ", round(sd(werte50$Ver50),2)),
+                  color = '#12342E',
+                  fill = '#387F72') %>%
+      gf_vline(xintercept = tail(werte50$Ver50,1), col = "red") %>%
+      gf_vline(xintercept = verpop, col = "blue") %>%
+      gf_labs(x = 'Anteil Verspätungen',
+              y = 'Häufigkeit') %>%
+      gf_theme(theme = theme_bw())
+    }
   })
   
   output$PlotMeanEnt500 <- renderPlot({
     if (input$SampleGo500){
       gf_dotplot( ~ x, data=data.frame(x=werte500$Ent500),
-                  title = paste0("Anzahl Stichproben: ",length(werte500$Ent500), 
-                                 ", Standardfehler: ", round(sd(werte500$Ent500),2))) %>%
-        gf_vline(xintercept = tail(werte500$Ent500,1), col = "red") %>%
-        gf_vline(xintercept = entpop, col = "blue")}
+                title = paste0("Anzahl Stichproben: ",length(werte500$Ent500), 
+                               ", Standardfehler: ", round(sd(werte500$Ent500),2)),
+                color = '#12342E',
+                fill = '#387F72') %>%
+      gf_vline(xintercept = tail(werte500$Ent500,1), col = "red") %>%
+      gf_vline(xintercept = entpop, col = "blue") %>%
+      gf_labs(x = 'Mittelwert Entfernung',
+              y = 'Häufigkeit') %>%
+      gf_theme(theme = theme_bw())
+    }
   })
   
   output$PlotMeanVer500 <- renderPlot({
     if (input$SampleGo500){
       gf_dotplot( ~ x, data=data.frame(x=werte500$Ver500),
-                  title = paste0("Anzahl Stichproben: ",length(werte500$Ver500), 
-                                 ", Standardfehler: ", round(sd(werte500$Ver500),2))) %>%
-        gf_vline(xintercept = tail(werte500$Ver500,1), col = "red") %>%
-        gf_vline(xintercept = verpop, col = "blue")}
+                title = paste0("Anzahl Stichproben: ",length(werte500$Ver500), 
+                               ", Standardfehler: ", round(sd(werte500$Ver500),2)),
+                color = '#12342E',
+                fill = '#387F72') %>%
+      gf_vline(xintercept = tail(werte500$Ver500,1), col = "red") %>%
+      gf_vline(xintercept = verpop, col = "blue") %>%
+      gf_labs(x = 'Anteil Verspätungen',
+              y = 'Häufigkeit') %>%
+      gf_theme(theme = theme_bw())
+    }
   })
   
   
