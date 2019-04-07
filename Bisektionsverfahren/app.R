@@ -1,5 +1,5 @@
 # ===========================================================================
-# app.R (Release 0.2)
+# app.R (Release 0.3)
 # =====----------------------------------------------------------------------
 #
 # Bisektionsverfahren
@@ -9,6 +9,7 @@
 #
 # 30. Mrz. 2019  (nm)  Allererste Version (0.1)
 # 05. Apr. 2019  (nm)  Man lernt stetig dazu (0.2)
+# 07. Apr. 2019  (nm)  Etwas mehr (FOM-)Farbe (0.3)
 #
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
@@ -35,18 +36,15 @@
 #  Einstein’s Dictum: 
 #
 #     “Everything should be as simple as possible, but no simpler.”
+#
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-
 
 library(shiny)
 library(mosaic)
 library(mosaicCalc)
 library(xtable)
+library(shinycssloaders) # Added package for spinner (see below)
 
-#fkttab <<- data.frame(integer(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric(), numeric())
-#names(fkttab) = c("iter","a", "c", "b", "f(a)", "f(c)", "f(b)", "f(a)*f(c)", "|a-b|", "|f(a)-f(b)|")
-
-fkttab <<- tribble(~"a", ~"c", ~"b", ~"f(a)", ~"f(c)", ~"f(b)", ~"f(a)*f(c)", ~"|a-b|", ~"|f(a)-f(b)|")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -67,18 +65,18 @@ ui <- fluidPage(
          
          numericInput("eps", "eps=", 5*10^-4, min=1*10^-10, max=0.1),
          
-#        submitButton("Aktualisieren", icon("refresh")),
-         actionButton(inputId="update", label="Aktualisieren", icon=icon("refresh")),
-         helpText("Aktualisieren der Ausgaben")
-         #submitButton("Reset", icon("caret-square-up")),
-         #helpText("Reset der Ausgaben")
+         actionButton(inputId="update", label="Nächster Schritt", icon=icon("refresh")),
+         helpText("Nächster Schritt der Iteration"),
+
+         actionButton(inputId="reset", label="Reset", icon=icon("caret-square-up")),
+         helpText("Zurücksetzen auf (aktuelle) Startwerte")
          
       ),
       
       # Show a plot of the generated distribution
       mainPanel(
-         plotOutput("functionPlot"),
-         tableOutput("functionTable")
+         plotOutput("functionPlot") %>% withSpinner(color = '#387F72'),
+         tableOutput("functionTable") %>% withSpinner(color = '#387F72')
         )
    )
 )
@@ -86,53 +84,101 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
  server <- function(input, output, session) {
 
+   FOMgreen <- '#387F72'
+   FOMblue <- '#387F72'
+   
+   acolor <- "blue"
+   bcolor <- "red"
+   ccolor <- FOMgreen
+   fktlinecolor <- "coral3"
+   
    rv <- reactiveValues(
+     fkt=NULL,
      a=NULL, 
      b=NULL,
      c=NULL,
-     df=tribble(~"a", ~"c", ~"b", ~"f(a)", ~"f(c)", ~"f(b)", ~"f(a)*f(c)", ~"|a-b|", ~"|f(a)-f(b)|")
+     df=tribble(~"a", ~"c", ~"b", ~"f(a)", ~"f(c)", ~"f(b)", ~"f(a)*f(c)", ~"|b-a|", ~"|f(b)-f(a)|")
      )     
 
+   observeEvent(input$reset, {
+     fkt <- makeFun( as.formula(paste(input$fkt, "~ x")))
+     a <- input$a
+     b <- input$b
+     c <- (a + b)/2
+     fac <- fkt(a)*fkt(c)
+     rv$fkt=fkt
+     rv$a=a
+     rv$b=b
+     rv$c=c
+     fafb <- abs(fkt(b)-fkt(a))
+     ab <- abs(b-a)
+     rv$df=tribble(~"a", ~"c", ~"b", ~"f(a)", ~"f(c)", ~"f(b)", ~"f(a)*f(c)", ~"|b-a|", ~"|f(b)-f(a)|")
+     add_row( rv$df,
+              a=a,
+              c=c,
+              b=b,
+              "f(a)"=fkt(a),
+              "f(c)"=fkt(c),
+              "f(b)"=fkt(b),
+              "f(a)*f(c)"=fac,
+              "|b-a|"=ab,
+              "|f(b)-f(a)|"=fafb
+     )
+   })
+   
    observeEvent(input$update, {
-      fkt <- makeFun( as.formula(paste(input$fkt, "~ x")))
-      if (is.null(rv$a) | is.null(rv$b)) {
-        rv$a <- input$a
-        rv$b <- input$b
-        rv$c <- (rv$a + rv$b)/2
-      } else {
-        if (rv$a > rv$b) { t <- rv$a; rv$a <- rv$b; rv$b <- rv$a}
-        
-        rv$c <- (rv$a + rv$b)/2
-        
-        fac = fkt(rv$a)*fkt(rv$c)
-        old_a <- rv$a
-        old_b <- rv$b
-        if (fac < 0) {
-          rv$b <- rv$c
-        } else {
-          rv$a <- rv$c
-        }
+      fkt <- rv$fkt
+      if (is.null(fkt)) {
+        fkt <- makeFun( as.formula(paste(input$fkt, "~ x")))
+        rv$fkt <- fkt
       }
-      if (abs(fkt(rv$b)-fkt(rv$a)) > input$eps/2) {
+      flag <- FALSE
+      a <- rv$a
+      b <- rv$b
+      if (is.null(a) | is.null(b)) {
+        a <- input$a
+        b <- input$b
+        flag <- TRUE
+      }
+      if (a > b) { t <- a; a <- b; b <- a}
+      c <- (a + b)/2
+      fac = fkt(a)*fkt(c)
+      old_a <- a
+      old_b <- b
+      if (!flag) {
+        if (fac < 0) {
+          b <- c
+        } else {
+          a <- c
+        }
+        c <- (a + b)/2
+      }
+      fafb <- abs(fkt(b)-fkt(a))
+      ab <- abs(b-a)
+      if (fafb > input$eps/2) {
         rv$df <- add_row( rv$df,
-          a=rv$a,
-          c=rv$c,
-          b=rv$b,
-          "f(a)"=fkt(rv$a),
-          "f(c)"=fkt(rv$c),
-          "f(b)"=fkt(rv$b),
-          "f(a)*f(c)"=fkt(rv$a)*fkt(rv$c),
-          "|a-b|"=abs(rv$a-rv$b),
-          "|f(a)-f(b)|"=abs(fkt(rv$a)-fkt(rv$b))
+          a=a,
+          c=c,
+          b=b,
+          "f(a)"=fkt(a),
+          "f(c)"=fkt(c),
+          "f(b)"=fkt(b),
+          "f(a)*f(c)"=fac,
+          "|b-a|"=ab,
+          "|f(b)-f(a)|"=fafb
         )
+        rv$a <- a
+        rv$b <- b
+        rv$c <- c
       } else {
        rv$a <- old_a
        rv$b <- old_b
-       rv$c <- (rv$a + rv$b)/2
+       rv$c <- (old_a + old_b)/2
       }
    })
      
    output$functionTable <- renderTable({
+     input$update
      tibble::rowid_to_column(as.data.frame(rv$df))
    },
    align = "r",
@@ -141,6 +187,13 @@ ui <- fluidPage(
    )
     
    output$functionPlot <- renderPlot({
+     input$update
+     fkt <- rv$fkt
+     if (is.null(fkt)) {
+       fkt <- makeFun( as.formula(paste(input$fkt, "~ x")))
+       rv$fkt <- fkt
+     }
+     
      if (is.null(rv$a) | is.null(rv$b)) {
        a <- input$a
        b <- input$b
@@ -152,18 +205,40 @@ ui <- fluidPage(
        # 
        m <- round(log(abs(b-a))/log(10))-1
        
-       fkt <- makeFun( as.formula(paste(input$fkt, "~ x")))
-       
-       xmin <- a - 8 * 10^m
-       xmax <- b + 8 * 10^m
+       xmin <- a - 7 * 10^m
+       xmax <- b + 7 * 10^m
        
        x <- seq(xmin, xmax, 0.001*10^m)
        
-       gf_line(y ~ x, data=data.frame(y=fkt(x), x=x)) %>%
+       fadata <- tribble(    ~y,   ~x,
+                         fkt(a),    a,
+                         fkt(a), xmin)
+       
+       fbdata <- tribble(    ~y,   ~x,
+                         fkt(b),    b,
+                         fkt(b), xmin)
+
+       fcdata <- tribble(    ~y,   ~x,
+                         fkt(c),    c,
+                         fkt(c), xmin)
+       
+       
+       gf_line(y ~ x, 
+               data=data.frame(y = fkt(x), x = x),
+               color = fktlinecolor,
+               alpha = .5
+               ) %>%
            gf_lims(x = c(xmin, xmax)) %>%
-           gf_vline(xintercept = c(a,b), color="gray40") %>%
-           gf_vline(xintercept = c, color="green") %>%
-           gf_hline(yintercept = 0)
+           gf_vline(xintercept = c(a,b), color=c(acolor, bcolor)) %>%
+           gf_vline(xintercept = c, color=ccolor) %>%
+           gf_hline(yintercept = 0) %>%
+           gf_theme(theme_bw()) + 
+        geom_line(aes(y=y, x=x), data=fadata, linetype = "dashed", size=0.5, color=acolor) +
+        geom_line(aes(y=y, x=x), data=fcdata, linetype = "dashed", size=0.5, color=ccolor) +
+        geom_rug(aes(y=fkt(a), x=NULL), linetype = "dashed", size=0.5, color=acolor) +
+        geom_rug(aes(y=fkt(c), x=NULL), linetype = "dashed", size=0.5, color=ccolor) +
+        geom_rug(aes(y=fkt(b), x=NULL), linetype = "dashed", size=0.5, color=bcolor) +
+        geom_line(aes(y=y, x=x), data=fbdata, linetype = "dashed", size=0.5, color=bcolor)
    })
 }
 
