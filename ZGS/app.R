@@ -31,7 +31,7 @@ tabPanel("Hintergrund",
                  
 tabPanel("Annäherung Normalverteilung", 
          fluidPage(
-           fluidRow(sliderInput("n", "Anzahl Münzwürfe", value = 1, min=1, max=300, step=1, animate = TRUE)),
+           fluidRow(sliderInput("n", "Anzahl Münzwürfe", value = 1, min=1, max=100, step=1, animate = TRUE)),
            fluidRow(plotOutput("Plotpbinom"))
            )
          )
