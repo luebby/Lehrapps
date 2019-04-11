@@ -22,7 +22,7 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Die Nullhypothese zu verwerfen, obwohl sie gilt nennt man alpha-Fehler oder Fehler 1. Art.")),
            fluidRow(column(12, "Ein beta-Fehler oder Fehler 2. Art liegt vor, wenn man H_0 nicht verwirft, obwohl H_0 nicht gilt.")),
            fluidRow(column(12, "Die Power eines Test ist die Wahrscheinlichkeit eine Nullhypothese zu verwerfen, die in der Tat nicht stimmt.")),
-           fluidRow(column(12, "Der Power hängt ab von dem wahren Wert (Effekt), alpha - und dem Stichprobenumfang n.")),
+           fluidRow(column(12, "Die Power hängt ab von dem wahren Wert (Effekt), alpha - und dem Stichprobenumfang n.")),
            fluidRow(column(12, "Man kann aber auch anhand der gewünschten Power und Annahmen über den wahren Wert den nötigen Stichprobenumfang ausrechnen.")),
            fluidRow(column(12, h4("Münzwurf"))),
            fluidRow(column(12, "Stellen Sie sich vor: Sie wollen zeigen, dass Sie die Kursentwicklung vorhersagen können.")),
@@ -30,7 +30,7 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Die Nullhypothese lautet dementsprechend: Ihre Erfolgswahrscheinlichkeit liegt bei höchstens 50%.")),
            fluidRow(column(12, "Angenommen Sie hätten eine Erfolgswahrscheinlichkeit p von 60%.")),
            fluidRow(column(12, "Angenommen Sie verwenden das übliche Signifikanzniveau alpha=5% und Sie wünschen sich eine Power von 80%,")),           
-           fluidRow(column(12, "d.h. Sie wollen sich vorab zu 80% sicher sein, dass das Verfahren H_0 korrekteweise verwerfen wird.")),
+           fluidRow(column(12, "d.h. Sie wollen sich vorab zu 80% sicher sein, dass das Verfahren H_0 korrekterweise verwerfen wird.")),
            fluidRow(column(12, "Was glauben Sie: wie viele Münzwurfe (Kursvorhersagen, Stichprobenumfang) sollten Sie einplanen?"))
            )
       ),
@@ -40,7 +40,7 @@ tabPanel("Münzwurf",
            sidebarLayout(
              sidebarPanel(
                fluidRow(column(12, h4("Parameter"))),
-               fluidRow(sliderInput("p", "Wahrer Anteil p", value = 0.6, min=0.5, max=0.9, step=0.01)),
+               fluidRow(sliderInput("p", "Wahrer Anteil p", value = 0.6, min=0.501, max=0.9, step=0.01)),
                fluidRow(sliderInput("alpha", "Signifikanzniveau alpha", value = 0.05, min=0.01, max=0.15, step=0.01)),
                fluidRow(sliderInput("power", "Power", value = 0.8, min=0.15, max=1, step=0.01))),
              mainPanel(
