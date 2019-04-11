@@ -30,7 +30,7 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Die Nullhypothese lautet dementsprechend: Ihre Erfolgswahrscheinlichkeit liegt bei höchstens 50%.")),
            fluidRow(column(12, "Angenommen Sie hätten eine Erfolgswahrscheinlichkeit p von 60%.")),
            fluidRow(column(12, "Angenommen Sie verwenden das übliche Signifikanzniveau alpha=5% und Sie wünschen sich eine Power von 80%,")),           
-           fluidRow(column(12, "d.h. Sie wollen sich vorab zu 80% sicher sein, dass Sie H_0 verwerfen können werden.")),
+           fluidRow(column(12, "d.h. Sie wollen sich vorab zu 80% sicher sein, dass das Verfahren H_0 korrekteweise verwerfen wird.")),
            fluidRow(column(12, "Was glauben Sie: wie viele Münzwurfe (Kursvorhersagen, Stichprobenumfang) sollten Sie einplanen?"))
            )
       ),
