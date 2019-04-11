@@ -1,5 +1,5 @@
 # ===========================================================================
-# app.R (Release 0.3)
+# app.R (Release 0.4)
 # =====----------------------------------------------------------------------
 #
 # Bisektionsverfahren
@@ -10,6 +10,7 @@
 # 30. Mrz. 2019  (nm)  Allererste Version (0.1)
 # 05. Apr. 2019  (nm)  Man lernt stetig dazu (0.2)
 # 07. Apr. 2019  (nm)  Etwas mehr (FOM-)Farbe (0.3)
+# 11. Apr. 2019  (nm)  Etwas mehr math. Schriften (0.4)
 #
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
@@ -52,6 +53,9 @@ ui <- fluidPage(
    # Application title
    titlePanel("Bisektionsverfahren"),
    
+   # Enable math in output!
+   withMathJax(),
+   
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
       sidebarPanel(
@@ -75,9 +79,18 @@ ui <- fluidPage(
       
       # Show a plot of the generated distribution
       mainPanel(
-         plotOutput("functionPlot") %>% withSpinner(color = '#387F72'),
-         tableOutput("functionTable") %>% withSpinner(color = '#387F72')
+        tabsetPanel(
+         tabPanel("Plot", plotOutput("functionPlot") %>% withSpinner(color = '#387F72')),
+         tabPanel("Table", tableOutput("functionTable") %>% withSpinner(color = '#387F72')),
+         tabPanel("Hintergrund",
+                  fluidPage(
+                    titlePanel("FOMshiny: Bisektionsverfahren"),
+                    helpText(h3("Hintergrund")),
+                    helpText('Die Idee des Bisektionsverfahren ist es ausgehend von einem Intervall \\([a, b]\\) mit \\(f(a) \\cdot f(b)<0\\), also mit mindestens einer Nullstelle im Intervall, das Intervall an der Stelle \\(c=\frac{a+b}{2}\\) zu halbieren und falls \\(f(a) \\cdot f(c) < 0\\) ist im Intervall \\([a, c]\\) weiter zu suchen oder alternativ im Intervall \\([b, c]\\) bis die Nullstelle (hinreichend genau) gefunden wurde.')
+                  )
+          )
         )
+     )
    )
 )
 
