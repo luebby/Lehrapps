@@ -61,7 +61,8 @@ server <- function(input, output) {
   
   
   output$Plotpwr <- renderPlot({
-    p.out <- pwr.p.test(h = ES.h(p1 = input$p, p2 = 0.50),
+    h <- floor(ES.h(p1 = input$p, p2 = 0.50)*10000)/10000
+    p.out <- pwr.p.test(h = h,
                         sig.level = input$alpha, 
                         power = input$power, 
                         alternative = "greater")
