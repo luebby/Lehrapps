@@ -232,7 +232,7 @@ ui <- fluidPage(
            gf_vline(xintercept = c(a,b), color=c(acolor, bcolor)) %>%
            gf_vline(xintercept = c, color=ccolor) %>%
            gf_hline(yintercept = 0) %>%
-           gf_theme(theme_bw()) + 
+           gf_theme(theme_bw(base_size = 18)) + 
         geom_line(aes(y=y, x=x), data=fadata, linetype = "dashed", size=0.5, color=acolor) +
         geom_line(aes(y=y, x=x), data=fcdata, linetype = "dashed", size=0.5, color=ccolor) +
         geom_rug(aes(y=fkt(a), x=NULL), linetype = "dashed", size=0.5, color=acolor) +
