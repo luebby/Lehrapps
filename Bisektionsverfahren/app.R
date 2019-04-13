@@ -7,7 +7,7 @@
 #
 # (W) by Norman Markgraf in 2019
 #
-# 30. Mrz. 2019  (nm)  Allererste Version (0.1)
+# 30. Mrz. 2019  (nm)  Aller erste Version (0.1)
 # 05. Apr. 2019  (nm)  Man lernt stetig dazu (0.2)
 # 07. Apr. 2019  (nm)  Etwas mehr (FOM-)Farbe (0.3)
 # 11. Apr. 2019  (nm)  Etwas mehr math. Schriften (0.4)

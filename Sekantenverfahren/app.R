@@ -58,7 +58,7 @@ ui <- fluidPage(
     sidebarPanel(
       textInput("fkt", 
                 "Funktion f(x)=",
-                "(x-0.9)^6-1"),
+                "(x-0.9)^2-1"),
       
       numericInput("x_alt", "x_0=", 0, min= -10, max = 10),
 
@@ -117,8 +117,12 @@ server <- function(input, output, session) {
     rv$fkt <- fkt
     rv$x <- x
     rv$x_alt <- x_alt
-    m_s <- (x_alt * fkt(x) - x * fkt(x_alt))/(fkt(x)- fkt(x_alt))
+    
+    fx <- fkt(x)
+    fx_alt <- fkt(x_alt)
+    m_s <- (fx-fx_alt)/(x - x_alt)
     x_neu <- x - fkt(x)/m_s
+    
     afx_neu <- abs(fkt(x_neu))
     rv$df <-  tribble(~"x", ~"x_alt", ~"f(x)", ~"m_S(x)", ~"x_neu", ~"|f(x_neu)-0|")
     add_row( rv$df,
@@ -149,10 +153,13 @@ server <- function(input, output, session) {
       flag <- TRUE
     }
     
-    m_s <- (x_alt * fkt(x) - x * fkt(x_alt))/(fkt(x)- fkt(x_alt))
+    fx <- fkt(x)
+    fx_alt <- fkt(x_alt)
+    m_s <- (fx-fx_alt)/(x - x_alt)
     
     x_neu <- x - fkt(x)/m_s
     afx_neu <- abs(fkt(x_neu))
+    
     if (afx_neu > input$eps/2) {
       rv$df <- add_row( rv$df,
                         x=x,
@@ -198,19 +205,21 @@ server <- function(input, output, session) {
       x_alt <- input$x_alt
       flag <- TRUE
     }
+    
     fx <- fkt(xx)
     fx_alt <- fkt(x_alt)
+    m_s <- (fx-fx_alt)/(xx - x_alt)
+    b <- fx-m_s*xx
     
-    dfx <- (x_alt * fx - xx * fx_alt)/(fx - fx_alt)
+    x_neu <- xx - fx/m_s
     
-    x_neu <- xx - fx/dfx
+    m <- round(log(max(abs(x_neu), abs(xx)))/log(10))-1
     
-    m <- round(log(max(abs(x_neu), abs(xx)))/log(10))+1
-    
-    xmin <- min(x_neu, xx) - 0.1 * 10^(m)
-    xmax <- max(x_neu, xx) + 0.1 * 10^(m)
+    xmin <- min(x_neu, xx, x_alt) - 0.1 * 10^(m)
+    xmax <- max(x_neu, xx, x_alt) + 0.1 * 10^(m)
     
     x <- seq(xmin, xmax, 0.001*10^m)
+    
     D <- data.frame (x1 = x_alt, x2 = xx, y1= fx_alt, y2 = fx)
     
     gf_line(y ~ x, 
@@ -219,8 +228,10 @@ server <- function(input, output, session) {
             alpha = .5
     ) %>%
       gf_lims(x = c(xmin, xmax)) %>%
-      gf_segment(y1 + y2 ~ x1 + x2, data=D, color = tangentlinecolor, linetype = "dashed") %>%
-      
+      gf_abline(slope = m_s, 
+                intercept = b,
+                color = tangentlinecolor,
+                linetype = "dashed" ) %>%
       gf_vline(xintercept = xx, color=ccolor) %>%
       gf_hline(yintercept = 0) %>%
       gf_theme(theme_bw(base_size = 18)) 

@@ -2,12 +2,12 @@
 # app.R (Release 0.1)
 # =====----------------------------------------------------------------------
 #
-# Bisektionsverfahren
-# -------------------
+# Newtonverfahren
+# ---------------
 #
 # (W) by Norman Markgraf in 2019
 #
-# 13. Apr. 2019  (nm)  Allererste Version (0.1)
+# 13. Apr. 2019  (nm)  Aller erste Version (0.1)
 #
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
