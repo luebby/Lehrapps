@@ -217,7 +217,6 @@ res500 <- observe({
                     color = 'white',  # White spaces between bars for better separation of bars
                     fill = '#387F72', # FOM-Blue for corporate design
                     alpha = .5) %>%   # Transparancy to better read exact values
-      gf_lims(x = xlims) %>%
       gf_refine(scale_x_continuous(limits = xlims, breaks = seq(xlims[1],xlims[2],250))) %>% # Breaks set manually to better read the exact values of the bars
       gf_labs(x = 'Entfernung',         
               y = 'Anzahl Flüge') %>% 
@@ -247,7 +246,6 @@ res500 <- observe({
                     color = 'white',   # White spaces between bars for better separation of bars
                     fill = '#387F72',  # FOM-Blue for corporate design
                     alpha = .5) %>%    # Transparancy to better read exact values
-        gf_lims(x = xlims) %>%
         gf_refine(scale_x_continuous(limits = xlims, breaks = seq(xlims[1],xlims[2],250))) %>%  # Breaks set manually to better read the exact values of the bars
         gf_labs(x = 'Entfernung',
                 y = 'Anzahl Flüge') %>%
@@ -275,7 +273,6 @@ res500 <- observe({
                   color = 'white',      # White spaces between bars for better separation of bars
                   fill = '#387F72',     # FOM-Blue for corporate design
                   alpha = .5) %>%       # Transparancy to better read exact values
-    gf_lims(x = xlims) %>%
     gf_refine(scale_x_continuous(limits = xlims, breaks = seq(xlims[1],xlims[2],250))) %>%  # Breaks set manually to better read the exact values of the bars
     gf_labs(x = 'Entfernung',
             y = 'Anzahl Flüge') %>%
