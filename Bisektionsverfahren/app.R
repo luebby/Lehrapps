@@ -119,10 +119,10 @@ ui <- fluidPage(
      b <- input$b
      c <- (a + b)/2
      fac <- fkt(a)*fkt(c)
-     rv$fkt=fkt
-     rv$a=a
-     rv$b=b
-     rv$c=c
+     rv$fkt <- fkt
+     rv$a <- a
+     rv$b <- b
+     rv$c <- c
      fafb <- abs(fkt(b)-fkt(a))
      ab <- abs(b-a)
      rv$df=tribble(~"a", ~"c", ~"b", ~"f(a)", ~"f(c)", ~"f(b)", ~"f(a)*f(c)", ~"|b-a|", ~"|f(b)-f(a)|")
