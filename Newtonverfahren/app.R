@@ -1,13 +1,14 @@
 # ===========================================================================
-# app.R (Release 0.1)
+# app.R (Release 0.2)
 # =====----------------------------------------------------------------------
 #
-# Newtonverfahren
-# ---------------
+# Newton-Verfahren
+# ----------------
 #
 # (W) by Norman Markgraf in 2019
 #
 # 13. Apr. 2019  (nm)  Aller erste Version (0.1)
+# 14. Apr. 2019  (nm)  Hintergrund, Literatur und Quellen angegeben. (0.2)
 #
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
@@ -48,7 +49,7 @@ library(shinycssloaders) # Added package for spinner (see below)
 ui <- fluidPage(
    
    # Application title
-   titlePanel("Newtonverfahren"),
+   titlePanel("Newton-Verfahren"),
    
    # Enable math in output!
    withMathJax(),
@@ -79,9 +80,25 @@ ui <- fluidPage(
          tabPanel("Table", tableOutput("functionTable") %>% withSpinner(color = '#387F72')),
          tabPanel("Hintergrund",
                   fluidPage(
-                    titlePanel("FOMshiny: Newtonverfahren"),
-                    helpText(h3("Hintergrund")) # ,
-                    # helpText('Die Idee des Bisektionsverfahren ist es ausgehend von einem Intervall \\([a, b]\\) mit \\(f(a) \\cdot f(b)<0\\), also mit mindestens einer Nullstelle im Intervall, das Intervall an der Stelle \\(c=\frac{a+b}{2}\\) zu halbieren und falls \\(f(a) \\cdot f(c) < 0\\) ist im Intervall \\([a, c]\\) weiter zu suchen oder alternativ im Intervall \\([b, c]\\) bis die Nullstelle (hinreichend genau) gefunden wurde.')
+                    titlePanel("FOMshiny: Newton-Verfahren"),
+                    h3("Hintergrund zum Newton-Verfahren"),
+                    h4("Die Idee und Konstruktion des Verfahrens"),
+                    p("Das Newton-Verfahren, auch Newton-Raphson-Verfahren genannt, dient der numerischen Lösung von (nicht-)linearen Gleichung."),
+                    p("Die Idee dabei ist es, sich der Nullstelle einer reellen, stetig diffenzierbaren Funktion  \\(f: \\mathbf{R}\\to\\mathbf{R}\\)  zu nähern in dem wir Schrittweise eine bekannte Näherung verbessern."),
+                    p("Dabei wird die aktuelle Näherung \\(x_n\\) dazu benutzt um im Punkt \\(P(x_n; f(x_n))\\) eine Tangente \\(t_P(x)\\) anzulegen und von dieser die Nullstelle \\(x_P\\) zu berechnen."),
+                    p("Wegen \\(t_P(x) = f(x_n) + f'(x_n)\\cdot(x-x_n)\\) ist \\(t_P(x_P)=0\\) und somit \\(x_P\\) leicht durch  \\(x_P = x_n-\\frac{f(x_n)}{f'(x_n)}\\) zu bestimmen."),
+                    p("In dem wir in jedem Schritt \\(x_p\\) als nächste Näherung wählen, erhalten wir die Rekursionsvorschrift: \\[x_{n+1} =  x_n-\\frac{f(x_n)}{f'(x_n)}\\]"),
+                    p("Zusammen mit dem Startwert \\(x_0\\) haben wir damit das Verfahren."),
+                    br(),
+                    h4("Abbruchkriterium"),
+                    p("Mögliche Abbruchkriterien sind abhängig von einem gewählten \\(\\epsilon\\) (vgl. eps und Rechner-Arithmetik) und können:"),
+                    p("(a) \\(|f(x_n)-0| \\leq \\epsilon\\)   oder"),
+                    p("(b) \\(|x_{n+1} - x_n| \\leq \\epsilon\\)"),
+                    p("Dabei bestimmt \\(\\epsilon\\) die Qualität der „Nullstelle“. In beiden Fällen kann es vorkommen, dass das Abbruchkriterium zu einem „schlechten“ Zeitpunkt erfüllt ist."),
+                    h4("Literatur/Quellen"),
+                    p("- ", a("https://de.wikipedia.org/wiki/Newton-Verfahren")), 
+                    p("- Rüdiger Verfürth, Vorlesungsskripum 2018: ", a(em("Einführung in die Numerische Mathematik"), href="https://www.ruhr-uni-bochum.de/num1/files/lectures/EinfNumerik.pdf")),
+                    p("- Michael Knochenschild, ", a(em("Numerische Mathematik: Eine beispielorientierte Einführung", href="https://amzn.to/2KCb7Qp")),", Carl Hanser Verlag GmbH & Co. KG; Auflage: 6., aktualisierte und erweiterte (10. April 2017)")
                   )
           )
         )
