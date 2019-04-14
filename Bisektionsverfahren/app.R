@@ -83,11 +83,39 @@ ui <- fluidPage(
          tabPanel("Plot", plotOutput("functionPlot") %>% withSpinner(color = '#387F72')),
          tabPanel("Table", tableOutput("functionTable") %>% withSpinner(color = '#387F72')),
          tabPanel("Hintergrund",
-                  fluidPage(
-                    titlePanel("FOMshiny: Bisektionsverfahren"),
-                    helpText(h3("Hintergrund")),
-                    helpText('Die Idee des Bisektionsverfahren ist es ausgehend von einem Intervall \\([a, b]\\) mit \\(f(a) \\cdot f(b)<0\\), also mit mindestens einer Nullstelle im Intervall, das Intervall an der Stelle \\(c=\frac{a+b}{2}\\) zu halbieren und falls \\(f(a) \\cdot f(c) < 0\\) ist im Intervall \\([a, c]\\) weiter zu suchen oder alternativ im Intervall \\([b, c]\\) bis die Nullstelle (hinreichend genau) gefunden wurde.')
-                  )
+            fluidPage(
+                titlePanel("Bisektionsverfahren"),
+                h3("Hintergrund zum Bisektionsverfahren"),
+                h4("Die Idee und Konstruktion des Verfahrens"),
+                p("Die Idee des Bisektionsverfahren ist es, die Nullstelle einer stetigen Funktion \\(f: \\mathbf{R} \\to \\mathbf{R}\\) in einem Intervall \\([a; b]\\) einzuschliessen. Die Startwerte \\(a\\) und \\(b\\) sind dabei so zu wählen, dass zwischen ihnen (mindestens) eine Nullstelle liegt und sich daher die Vorzeichen von \\(f(a)\\) und \\(f(b)\\) unterscheiden."),
+                p("Liegt ein solches Intervall vor, so ist \\(f(a) \\cdot f(b) < 0\\). "),
+                p("Das Bisektionsverfahren teilt nun das Intervall \\([a; b]\\) in der Mitte auf. Dazu wird die als \\(c =\\frac{a+b}{2}\\) berechnet."),
+                p("Nun sollte sich die Nullstelle entweder im Intervall \\([a; c]\\) oder im Intervall \\([c; b]\\) befinden. Dazu prüft man ob \\(f(a) \\cdot f(c) < 0\\) gilt, die Nullstelle somit im ersten Intervall liegt."),
+                p("In diesem Falle ersetzt man \\(b\\) durch \\(c\\), andernfalls \\(a\\) durch \\(c\\) und beginnt von vorne."),
+                br(),
+                h4("Abbruchkriterium"),
+                p("Mögliche Abbruchkriterien sind abhängig von einem gewählten \\(\\epsilon\\) (vgl. eps und Rechner-Arithmetik) und können sein:"),
+                p("(a) \\(|f(c) - 0| \\leq \\epsilon\\)   oder"),
+                p("(b) \\(|c - a| \\leq \\epsilon\\)"),
+                p("Als Lösung wird dann \\(c\\) zurückgegeben."),
+                p("Dabei bestimmt \\(\\epsilon\\) die Qualität der „Nullstelle“. In beiden Fällen kann es vorkommen, dass das Abbruchkriterium zu einem „schlechten“ Zeitpunkt erfüllt ist."),
+                p("Ein weiteres Abbruckkriterium ist das Überprüfen einer maximalen Iterationsanzahl sinnvoll."),
+                br(),
+                h4("Literatur/Quellen"),
+                p("- ", a("Wikipedia Artikel zum Thema Bisektion", href="https://de.wikipedia.org/wiki/Bisektion")),
+                p("- Michael Knochenschild, ", a("Numerische Mathematik: Eine beispielorientierte Einführung", href="https://amzn.to/2KCb7Qp"),", Carl Hanser Verlag GmbH & Co. KG; Auflage: 6., aktualisierte und erweiterte (10. April 2017)")
+            )
+          ),
+          tabPanel("Über diese App",
+                   fluidPage(
+                     titlePanel("Über diese App"),
+                     h3("Autoren:"),
+                     p("Hauptautor ist Norman Markgraf (E-mail: nmarkgraf(at)hotmail.com)"),
+                     h3("Copyright:"),
+                     p("Der Quellcode dieser Shiny Application ist unter der GPL 3 veröffentlicht."),
+                     h3("Nutzungsrecht:"),
+                     p("Diese Shiny App kann von jedem benutzt werden. Es werden keine Garantien übernommen, egal welcher Art und Weise!")
+                   )
           )
         )
      )

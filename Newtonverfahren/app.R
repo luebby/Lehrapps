@@ -91,14 +91,15 @@ ui <- fluidPage(
                     p("Zusammen mit dem Startwert \\(x_0\\) haben wir damit das Verfahren."),
                     br(),
                     h4("Abbruchkriterium"),
-                    p("Mögliche Abbruchkriterien sind abhängig von einem gewählten \\(\\epsilon\\) (vgl. eps und Rechner-Arithmetik) und können:"),
+                    p("Mögliche Abbruchkriterien sind abhängig von einem gewählten \\(\\epsilon\\) (vgl. eps und Rechner-Arithmetik) und können sein:"),
                     p("(a) \\(|f(x_n)-0| \\leq \\epsilon\\)   oder"),
                     p("(b) \\(|x_{n+1} - x_n| \\leq \\epsilon\\)"),
                     p("Dabei bestimmt \\(\\epsilon\\) die Qualität der „Nullstelle“. In beiden Fällen kann es vorkommen, dass das Abbruchkriterium zu einem „schlechten“ Zeitpunkt erfüllt ist."),
+                    br(),
                     h4("Literatur/Quellen"),
-                    p("- ", a("https://de.wikipedia.org/wiki/Newton-Verfahren")), 
-                    p("- Rüdiger Verfürth, Vorlesungsskripum 2018: ", a(em("Einführung in die Numerische Mathematik"), href="https://www.ruhr-uni-bochum.de/num1/files/lectures/EinfNumerik.pdf")),
-                    p("- Michael Knochenschild, ", a(em("Numerische Mathematik: Eine beispielorientierte Einführung", href="https://amzn.to/2KCb7Qp")),", Carl Hanser Verlag GmbH & Co. KG; Auflage: 6., aktualisierte und erweiterte (10. April 2017)")
+                    p("- ", a("Wikipedia-Artikel zum Thema Newton-Verfahren", href="https://de.wikipedia.org/wiki/Newton-Verfahren")), 
+                    p("- Rüdiger Verfürth, Vorlesungsskripum 2018: ", a("Einführung in die Numerische Mathematik", href="https://www.ruhr-uni-bochum.de/num1/files/lectures/EinfNumerik.pdf")),
+                    p("- Michael Knochenschild, ", a("Numerische Mathematik: Eine beispielorientierte Einführung", href="https://amzn.to/2KCb7Qp"),", Carl Hanser Verlag GmbH & Co. KG; Auflage: 6., aktualisierte und erweiterte (10. April 2017)")
                   )
          ),
          tabPanel("Über diese App",
