@@ -80,7 +80,7 @@ ui <- fluidPage(
          tabPanel("Table", tableOutput("functionTable") %>% withSpinner(color = '#387F72')),
          tabPanel("Hintergrund",
                   fluidPage(
-                    titlePanel("FOMshiny: Newton-Verfahren"),
+                    titlePanel("Newton-Verfahren"),
                     h3("Hintergrund zum Newton-Verfahren"),
                     h4("Die Idee und Konstruktion des Verfahrens"),
                     p("Das Newton-Verfahren, auch Newton-Raphson-Verfahren genannt, dient der numerischen Lösung von (nicht-)linearen Gleichung."),
@@ -100,6 +100,17 @@ ui <- fluidPage(
                     p("- Rüdiger Verfürth, Vorlesungsskripum 2018: ", a(em("Einführung in die Numerische Mathematik"), href="https://www.ruhr-uni-bochum.de/num1/files/lectures/EinfNumerik.pdf")),
                     p("- Michael Knochenschild, ", a(em("Numerische Mathematik: Eine beispielorientierte Einführung", href="https://amzn.to/2KCb7Qp")),", Carl Hanser Verlag GmbH & Co. KG; Auflage: 6., aktualisierte und erweiterte (10. April 2017)")
                   )
+         ),
+         tabPanel("Über diese App",
+              fluidPage(
+                titlePanel("Über diese App"),
+                h3("Autoren:"),
+                p("Hauptautor ist Norman Markgraf (E-mail: nmarkgraf(at)hotmail.com)"),
+                h3("Copyright:"),
+                p("Der Quellcode dieser Shiny Application ist unter der GPL 3 veröffentlicht."),
+                h3("Nutzungsrecht:"),
+                p("Diese Shiny App kann von jedem benutzt werden. Es werden keine Garantien übernommen, egal welcher Art und Weise!")
+              )
           )
         )
      )
