@@ -11,6 +11,7 @@ library(shiny)
 library(mosaic)
 library(nycflights13)
 library(shinycssloaders) # Added package for spinner (see below)
+library(shinydashboard)
 data(flights)
 
 
@@ -45,82 +46,135 @@ xlims2ent50 <- c((entpop-6*entpop_se50),(entpop+6*entpop_se50))
 xlims2ver500 <- c((verpop-6*verpop_se500),(verpop+6*verpop_se500))
 xlims2ent500 <- c((entpop-6*entpop_se500),(entpop+6*entpop_se500))
 
+
 # ui section
-ui <- navbarPage(title = "Sampling",
-                 tabPanel("Hintergrund", 
-                          fluidPage(
-                            titlePanel("FOMshiny: Sampling"),
-                            fluidRow(column(12, h3("Hintergrund"))),
-                            fluidRow(column(12, "Im R Paket nycflights13 liegen alle abgehenden Flüge aus New York City innerhalb der USA aus dem Jahr 2013 vor.")),
-                            fluidRow(column(12, "Der Datensatz wurde eingeschränkt auf den Flughafen JFK, so dass insgesamt N=109079 Beobachtungen vorliegen.")),
-                            fluidRow(column(12, "Ein Flug wurde als verspätet klassifiziert, wenn er mehr als 10min Verspätung hatte.")),
-                            fluidRow(column(12, h3("Population"))),
-                            fluidRow(column(12, "Hier sehen Sie die Verteilung der Entfernung des Fluges, so wie ob dieser verspätet ankam.")),
-                            fluidRow(column(12, h3("Stichprobe n=50"))),
-                            fluidRow(column(12, "Auf der linken Seite sehen Sie die Verteilung einer zufälligen Stichprobe mit n=50.")),
-                            fluidRow(column(12, "Auf der rechten Seite können Sie die Stichprobenverteilung, d.h. die Verteilung des Mittelwertes bzw. des Anteils über die zufälligen Stichproben entwickeln.")),
-                            fluidRow(column(12, "Der rote Strich ist der Mittelwert bzw. Anteil der aktuellen Stichprobe, der blaue der der Population.")),
-                            fluidRow(column(12, h3("Stichprobe n=500"))),
-                            fluidRow(column(12, "Auf der linken Seite sehen Sie die Verteilung einer zufälligen Stichprobe mit n=500.")),
-                            fluidRow(column(12, "Auf der rechten Seite können Sie die Stichprobenverteilung, d.h. die Verteilung des Mittelwertes bzw. des Anteils über die zufälligen Stichproben entwickeln.")),
-                            fluidRow(column(12, "Der rote Strich ist der Mittelwert bzw. Anteil der aktuellen Stichprobe, der blaue der der Population.")),
-                            fluidRow(column(12, h4("Hinweise:"))),
-                            fluidRow(column(12, "Worin unterscheiden sich die Stichprobenverteilung mit n=50 und n=500?")),
-                            fluidRow(column(12, "Gegen welche Verteilungsform entwickeln sich die Stichprobenverteilungen?"))
-                          )),
-                 
-
-                 tabPanel("Population", 
-                          fluidPage(
-                            titlePanel("Verteilung Population"),
-                            fluidRow(column(12, h3("Verteilung Entfernung"))),
-                            fluidRow(column(12, plotOutput("PlotOriginalEnt") %>% withSpinner(color = '#387F72'))), # Spinner while figure is loading
-                            fluidRow(column(12, h3("Verteilung Verspätung"))),
-                            fluidRow(column(12, plotOutput("PlotOriginalVer") %>% withSpinner(color = '#387F72')))  # Spinner while figure is loading
-                          )
-                 ),
-                 
-                 tabPanel("Stichprobe n=50", 
-                          fluidRow(actionButton("SampleGo50", "Sample!", icon = icon("refresh"))),
-                          splitLayout(
-                          fluidPage(
-                            titlePanel("Stichprobe n=50"),
-                            fluidRow(column(12, h3("Entfernung Stichprobe"))),
-                            fluidRow(column(12, plotOutput("PlotEnt50"))),
-                            fluidRow(column(12, h3("Verspätung Stichprobe"))),
-                            fluidRow(column(12, plotOutput("PlotVer50")))
-                            ),
-                          fluidPage(
-                            titlePanel("Stichprobenverteilung n=50"),
-                            fluidRow(column(12, h3("Verteilung Mittelwert Entfernung"))),
-                            fluidRow(column(12, plotOutput("PlotMeanEnt50"))),
-                            fluidRow(column(12, h3("Verteilung Anteil Verspätung"))),
-                            fluidRow(column(12, plotOutput("PlotMeanVer50")))
-                            )
-                          )
-                    ),
-                 tabPanel("Stichprobe n=500", 
-                          fluidRow(actionButton("SampleGo500", "Sample!", icon = icon("refresh"))),
-                          splitLayout(
-                            fluidPage(
-                              titlePanel("Stichprobe n=500"),
-                              fluidRow(column(12, h3("Entfernung Stichprobe"))),
-                              fluidRow(column(12, plotOutput("PlotEnt500"))),
-                              fluidRow(column(12, h3("Verspätung Stichprobe"))),
-                              fluidRow(column(12, plotOutput("PlotVer500")))
-                            ),
-                            fluidPage(
-                              titlePanel("Stichprobenverteilung n=500"),
-                              fluidRow(column(12, h3("Verteilung Mittelwert Entfernung"))),
-                              fluidRow(column(12, plotOutput("PlotMeanEnt500"))),
-                              fluidRow(column(12, h3("Verteilung Anteil Verspätung"))),
-                              fluidRow(column(12, plotOutput("PlotMeanVer500")))
-                            )
-                          )
-                 )                
+ui = dashboardPage(
+  dashboardHeader(title = "FOM-Lehrapp: Sampling",titleWidth = 300
+  ),
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Population", tabName = "Population",icon = icon('tachometer')),
+      menuItem("Stichprobe n=50", tabName = "sample_50",icon = icon('tachometer')),
+      menuItem("Stichprobe n=500", tabName = "sample_500",icon = icon('tachometer'))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem("Population",
+        fluidRow(
+          box(
+            width = 12,
+            status = "info", solidHeader = TRUE,
+            title = "Hintergrund",
+            p("Im R Paket nycflights13 liegen alle abgehenden Flüge aus New York City innerhalb der USA aus dem Jahr 2013 vor. 
+              Der Datensatz wurde eingeschränkt auf den Flughafen JFK, so dass insgesamt N=109079 Beobachtungen vorliegen.
+              Ein Flug wurde als verspätet klassifiziert, wenn er mehr als 10min Verspätung hatte. Hier sehen Sie die Verteilung
+              der Entfernung des Fluges, so wie ob dieser verspätet ankam.")
+          )
+        ),
+        fluidRow(
+          box(
+            width = 12,
+            status = "primary", solidHeader = TRUE,
+            title = "Verteilung der Entfernungen",
+            plotOutput("PlotOriginalEnt") %>% withSpinner(color = '#387F72')
+          )
+        ),
+        fluidRow(
+          box(
+            width = 12,
+            status = "primary", solidHeader = TRUE,
+            title = "Verteilung der Verspätungen",
+            plotOutput("PlotOriginalVer") %>% withSpinner(color = '#387F72')
+          )
+        )
+      ),
+      tabItem("sample_50",
+        fluidRow(
+          box(
+            width = 12,
+            status = "info", solidHeader = TRUE,
+            title = "Stichprobe n=50",
+            p("Auf der linken Seite sehen Sie die Verteilung einer zufälligen Stichprobe mit n=50. Auf der rechten Seite können 
+              Sie die Stichprobenverteilung, d.h. die Verteilung des Mittelwertes bzw. des Anteils über die zufälligen Stichproben entwickeln. 
+              Der rote Strich ist der Mittelwert bzw. Anteil der aktuellen Stichprobe, der blaue der der Population."),
+            p("Probiere es aus und ziehe eine Stichprobe von 50 Flügen:"),
+            actionButton("SampleGo50", "Sample!", icon = icon("refresh"))
+          )
+        ),
+        fluidRow(
+          box(
+            width = 12,
+            status = "primary", solidHeader = TRUE,
+            title = "Entfernung von Flügen",
+            column(6, 
+                   h4("Entfernung Stichprobe", align = "center"),
+                   plotOutput("PlotEnt50")),
+            column(6, 
+                   h4("Verteilung Mittelwert Entfernung", align = "center"),
+                   plotOutput("PlotMeanVer50"))
+          )
+        ),
+        fluidRow(
+          box(
+            width = 12,
+            status = "primary", solidHeader = TRUE,
+            title = "Verspätung von Flügen",
+            column(6, 
+                   h4("Verspätung Stichprobe", align = "center"),
+                   plotOutput("PlotVer50")),
+            column(6, 
+                   h4("Verteilung Anteil Verspätung", align = "center"),
+                   plotOutput("PlotMeanEnt50"))
+          )
+        )
+      ),
+      tabItem("sample_500",
+        fluidRow(
+          box(
+            width = 12,
+            status = "info", solidHeader = TRUE,
+            title = "Stichprobe n=500",
+            p("Auf der linken Seite sehen Sie die Verteilung einer zufälligen Stichprobe mit n=500. Auf der rechten 
+              Seite können Sie die Stichprobenverteilung, d.h. die Verteilung des Mittelwertes bzw. des Anteils über 
+              die zufälligen Stichproben entwickeln. Der rote Strich ist der Mittelwert bzw. Anteil der aktuellen 
+              Stichprobe, der blaue der der Population."),
+            p("Hinweise: Worin unterscheiden sich die Stichprobenverteilung mit n=50 und n=500? Gegen welche 
+              Verteilungsform entwickeln sich die Stichprobenverteilungen?"),
+            p("Probiere es aus und ziehe eine Stichprobe von 500 Flügen:"),
+            actionButton("SampleGo500", "Sample!", icon = icon("refresh"))
+          )
+        ),
+        fluidRow(
+          box(
+            width = 12,
+            status = "primary", solidHeader = TRUE,
+            title = "Entfernung von Flügen",
+            column(6, 
+                   h4("Entfernung Stichprobe", align = "center"),
+                   plotOutput("PlotEnt500")),
+            column(6, 
+                   h4("Verteilung Mittelwert Entfernung", align = "center"),
+                   plotOutput("PlotMeanVer500"))
+          )
+        ),
+        fluidRow(
+          box(
+            width = 12,
+            status = "primary", solidHeader = TRUE,
+            title = "Verspätung von Flügen",
+            column(6, 
+                   h4("Verspätung Stichprobe", align = "center"),
+                   plotOutput("PlotVer500")),
+            column(6, 
+                   h4("Verteilung Anteil Verspätung", align = "center"),
+                   plotOutput("PlotMeanEnt500"))
+          )
+        )
+      )
+    )
+  )
 )
-
-
 
 # server section
 server = function(input, output) {
@@ -163,7 +217,6 @@ res500 <- observe({
                     color = 'white',  # White spaces between bars for better separation of bars
                     fill = '#387F72', # FOM-Blue for corporate design
                     alpha = .5) %>%   # Transparancy to better read exact values
-      gf_lims(x = xlims) %>%
       gf_refine(scale_x_continuous(limits = xlims, breaks = seq(xlims[1],xlims[2],250))) %>% # Breaks set manually to better read the exact values of the bars
       gf_labs(x = 'Entfernung',         
               y = 'Anzahl Flüge') %>% 
@@ -193,7 +246,6 @@ res500 <- observe({
                     color = 'white',   # White spaces between bars for better separation of bars
                     fill = '#387F72',  # FOM-Blue for corporate design
                     alpha = .5) %>%    # Transparancy to better read exact values
-        gf_lims(x = xlims) %>%
         gf_refine(scale_x_continuous(limits = xlims, breaks = seq(xlims[1],xlims[2],250))) %>%  # Breaks set manually to better read the exact values of the bars
         gf_labs(x = 'Entfernung',
                 y = 'Anzahl Flüge') %>%
@@ -221,7 +273,6 @@ res500 <- observe({
                   color = 'white',      # White spaces between bars for better separation of bars
                   fill = '#387F72',     # FOM-Blue for corporate design
                   alpha = .5) %>%       # Transparancy to better read exact values
-    gf_lims(x = xlims) %>%
     gf_refine(scale_x_continuous(limits = xlims, breaks = seq(xlims[1],xlims[2],250))) %>%  # Breaks set manually to better read the exact values of the bars
     gf_labs(x = 'Entfernung',
             y = 'Anzahl Flüge') %>%
