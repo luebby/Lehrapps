@@ -14,6 +14,7 @@ library(DT)
 daten <- read.csv2("results-survey372953.csv", 
                    fileEncoding = "UTF-8")
 
+set.seed(1986)
 daten <- daten %>%
   na.omit() %>%
   filter(Gewicht >= 50 & Gewicht <= 150) %>%
