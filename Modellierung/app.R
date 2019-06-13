@@ -76,8 +76,8 @@ tabPanel("Stichprobe",
          fluidPage(
            sidebarLayout(
              sidebarPanel(
-               fluidRow(sliderInput("Sampeln", "Anzahl Beobachtungen", 2, 141, 50)),
-               fluidRow(actionButton("SampelnGo", "Los!")),
+               fluidRow(sliderInput("Samplen", "Anzahl Beobachtungen", 2, 141, 50)),
+               fluidRow(actionButton("SamplenGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Probieren Sie verschiedene Stichprobenumfänge aus.")),
                fluidRow(column(12,"Wie stark variiert das Ergebnis?")),
@@ -94,7 +94,7 @@ tabPanel("Resample",
          fluidPage(
            sidebarLayout(
              sidebarPanel(
-               fluidRow(actionButton("ResampelnGo", "Los!")),
+               fluidRow(actionButton("ResamplenGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Wie stark variiert das Ergebnis?")),
                fluidRow(column(12,"Wie stark weicht es vom Original ab?")),
