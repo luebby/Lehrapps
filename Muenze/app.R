@@ -11,7 +11,7 @@ ui <- dashboardPage(
   dashboardHeader(title = "Münzwurf"),
   dashboardSidebar(
     sliderInput("p", "Wahrscheinlichkeit Kopf", 0.01, 0.99, 0.5, 0.01),
-    sliderInput("n", "Anzahl Würfe", 1, 100, 1, 8),
+    sliderInput("n", "Anzahl Würfe", 1, 100, 8, 1),
     sliderInput("s", "Anzahl Wiederholungen", 1, 1000, 1, 1),
 
     actionButton("go", "Los!")
