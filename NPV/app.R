@@ -15,7 +15,7 @@ ui <- fluidPage(
              column(4, numericInput("r2", HTML("Cashflow 2. Jahr \\(C_2\\):"), 800, 0, 10e6))),
     fluidRow(column(4, numericInput("r3", HTML("Cashflow 3. Jahr \\(C_3\\):"), 600, 0, 10e6)),
              column(4, numericInput("r4", HTML("Cashflow 4. Jahr \\(C_4\\):"), 200, 0, 10e6)),
-             column(4, numericInput("r5", HTML("Cashflow 5. Jahr \\(C_4\\):"), 0, 0, 10e6))),
+             column(4, numericInput("r5", HTML("Cashflow 5. Jahr \\(C_5\\):"), 0, 0, 10e6))),
     fluidRow(column(4, sliderInput("i", HTML("Diskontierungsfaktor (Zinssatz) \\(r\\) in %:"), 0, 20, 10, 0.01)),
              column(4, uiOutput("npv"))),
     fluidRow(column(12, uiOutput('npv1'))),
