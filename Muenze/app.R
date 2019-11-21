@@ -12,7 +12,7 @@ ui <- dashboardPage(
   dashboardSidebar(
     sliderInput("p", "Wahrscheinlichkeit Kopf", 0.01, 0.99, 0.5, 0.01),
     sliderInput("n", "Anzahl Würfe", 1, 100, 8, 1),
-    sliderInput("s", "Anzahl Wiederholungen", 1, 1000, 1, 1),
+    sliderInput("s", "Anzahl Stichproben", 1, 1000, 1, 1),
 
     actionButton("go", "Los!")
   ),
@@ -47,7 +47,7 @@ server <- function(input, output) {
     if (input$go){
       gf_bar( ~ data$simu) %>%
         gf_refine(scale_x_discrete(drop=FALSE)) %>%
-        gf_labs(x="Anzahl Kopf", y="Häufigkeit")
+        gf_labs(x="Anzahl Kopf", y="Häufigkeit in Stichproben")
       }
   })
   
