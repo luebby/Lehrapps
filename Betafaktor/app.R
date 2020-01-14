@@ -122,8 +122,8 @@ CalculateReturn <- function(xtsdat, date = endDate, period = "monatlich", type =
 
 ##############################################################################
 # Vorverarbeitung
-DAX30 <- read_excel("DAX30_191031.xlsx", sheet = "Constituents", guess_max = 10000) 
-Index <- read_excel("DAX30_191031.xlsx", sheet = "Indices", guess_max = 10000) 
+DAX30 <- read_excel("DAX30.xlsx", sheet = "Constituents", guess_max = 10000) 
+Index <- read_excel("DAX30.xlsx", sheet = "Indices", guess_max = 10000) 
 
 
 # guess_max notwendig, sonst wird aus Datenreihen, die erst nach 1000 Werten anfangen, logical
