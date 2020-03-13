@@ -68,8 +68,8 @@ ui = dashboardPage(
             title = "Hintergrund",
             p("Im R Paket nycflights13 liegen alle abgehenden Flüge aus New York City innerhalb der USA aus dem Jahr 2013 vor. 
               Der Datensatz wurde eingeschränkt auf den Flughafen JFK, so dass insgesamt N=109079 Beobachtungen vorliegen.
-              Ein Flug wurde als verspätet klassifiziert, wenn er mehr als 10min Verspätung hatte. Hier sehen Sie die Verteilung
-              der Entfernung des Fluges, so wie ob dieser verspätet ankam.")
+              Ein Flug wurde als verspätet klassifiziert, wenn er mehr als 10 Min. Verspätung hatte. Hier sehen Sie die Verteilung
+              der Entfernung des Fluges, sowie ob dieser verspätet ankam.")
           )
         ),
         fluidRow(
@@ -96,9 +96,9 @@ ui = dashboardPage(
             status = "info", solidHeader = TRUE,
             title = "Stichprobe n=50",
             p("Auf der linken Seite sehen Sie die Verteilung einer zufälligen Stichprobe mit n=50. Auf der rechten Seite können 
-              Sie die Stichprobenverteilung, d.h. die Verteilung des Mittelwertes bzw. des Anteils über die zufälligen Stichproben entwickeln. 
+              Sie die Stichprobenverteilung, d. h. die Verteilung des Mittelwertes bzw. des Anteils über die zufälligen Stichproben entwickeln. 
               Der rote Strich ist der Mittelwert bzw. Anteil der aktuellen Stichprobe, der blaue der der Population."),
-            p("Probiere es aus und ziehe eine Stichprobe von 50 Flügen:"),
+            p("Probieren Sie aus und ziehen Sie Stichproben von 50 Flügen:"),
             actionButton("SampleGo50", "Sample!", icon = icon("refresh"))
           )
         ),
@@ -136,12 +136,12 @@ ui = dashboardPage(
             status = "info", solidHeader = TRUE,
             title = "Stichprobe n=500",
             p("Auf der linken Seite sehen Sie die Verteilung einer zufälligen Stichprobe mit n=500. Auf der rechten 
-              Seite können Sie die Stichprobenverteilung, d.h. die Verteilung des Mittelwertes bzw. des Anteils über 
+              Seite können Sie die Stichprobenverteilung, d. h. die Verteilung des Mittelwertes bzw. des Anteils über 
               die zufälligen Stichproben entwickeln. Der rote Strich ist der Mittelwert bzw. Anteil der aktuellen 
               Stichprobe, der blaue der der Population."),
-            p("Hinweise: Worin unterscheiden sich die Stichprobenverteilung mit n=50 und n=500? Gegen welche 
+            p("Hinweise: Worin unterscheiden sich die Stichprobenverteilungen mit n=50 und n=500? Gegen welche 
               Verteilungsform entwickeln sich die Stichprobenverteilungen?"),
-            p("Probiere es aus und ziehe eine Stichprobe von 500 Flügen:"),
+            p("Probieren Sie aus und ziehen Sie Stichproben von 500 Flügen:"),
             actionButton("SampleGo500", "Sample!", icon = icon("refresh"))
           )
         ),
