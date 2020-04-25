@@ -19,7 +19,7 @@ data("marioKart")
 daten <- marioKart %>%
   filter(totalPr <= 80) %>%
   mutate(Zustand = case_when(cond=="new" ~ "neu",
-                             cond=="used" ~ "gebracht")) %>%
+                             cond=="used" ~ "gebraucht")) %>%
   rename(Dauer=duration) %>%
   rename(Preis=totalPr) %>%
   select(Preis, Dauer, Zustand) %>%
@@ -40,7 +40,7 @@ tabPanel("Hintergrund",
            fluidRow(column(12, "Hängt das vielleicht mit der Auktionsdauer und dem Zustand (neu/ gebraucht) zusammen?")),
            fluidRow(column(12, "Dazu betrachten wir eine lineare Regression mit Wechselwirkung, 
                            d.h. der vermutete Zusammenhang zwischen Dauer und Preis wird evtl. durch den Zustand modelliert.")),
-           fluidRow(column(12, "Beachten Sie bitte das wichtige Kovariablen wie Ausstattungsmerkmale etc. hier nicht berücksichtigt werden.")),
+           fluidRow(column(12, "Beachten Sie bitte, dass wichtige Kovariablen wie Ausstattungsmerkmale etc. hier nicht berücksichtigt werden.")),
            fluidRow(column(12, h3("Gesamtdatensatz"))),
            fluidRow(column(12, "Hier sehen Sie die insgesamt zur Verfügung stehende Stichprobe. 
                            Diese besteht aus n=141 Beobachtungen von Mario Kart für Nintendo Wii Auktionen im Oktober 2009.")),
@@ -76,8 +76,8 @@ tabPanel("Stichprobe",
          fluidPage(
            sidebarLayout(
              sidebarPanel(
-               fluidRow(sliderInput("Sampeln", "Anzahl Beobachtungen", 2, 141, 50)),
-               fluidRow(actionButton("SampelnGo", "Los!")),
+               fluidRow(sliderInput("Samplen", "Anzahl Beobachtungen", 2, 141, 50)),
+               fluidRow(actionButton("SamplenGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Probieren Sie verschiedene Stichprobenumfänge aus.")),
                fluidRow(column(12,"Wie stark variiert das Ergebnis?")),
@@ -94,7 +94,7 @@ tabPanel("Resample",
          fluidPage(
            sidebarLayout(
              sidebarPanel(
-               fluidRow(actionButton("ResampelnGo", "Los!")),
+               fluidRow(actionButton("ResamplenGo", "Los!")),
                fluidRow(column(12,h4("Hinweis:"))),
                fluidRow(column(12,"Wie stark variiert das Ergebnis?")),
                fluidRow(column(12,"Wie stark weicht es vom Original ab?")),
