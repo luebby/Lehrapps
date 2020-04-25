@@ -176,6 +176,19 @@ server <- function(input, output, session) {
   ccolor <- FOMgreen
   fktlinecolor <- "coral3"
   
+  data <- reactive({
+    validate(
+      need(req(input$fkt) != "", "Bitte eine Funktion angeben!")
+    )
+    
+    fkt <- makeFun(as.formula(paste(input$fkt, "~ x")))
+    
+    validate(
+      need(fkt(input$a)*fkt(input$b) < 0, "f(a) * f(b) muss kleiner Null sein!")
+    )
+    list(a=input$a, b=input$b)
+  })
+  
   rv <- reactiveValues(
     fkt = NULL,
     a = NULL,
@@ -196,15 +209,18 @@ server <- function(input, output, session) {
   
   observeEvent(input$reset, {
     fkt <- makeFun(as.formula(paste(input$fkt, "~ x")))
-    a <- input$a
-    b <- input$b
+    a <- data()$a
+    b <- data()$b
     c <- (a + b) / 2
-    fac <- fkt(a) * fkt(c)
+    fa <- fkt(a)
+    fb <- fkt(b)
+    fc <- fkt(c)
+    fac <- fa * fc
     rv$fkt <- fkt
     rv$a <- a
     rv$b <- b
     rv$c <- c
-    fafb <- abs(fkt(b) - fkt(a))
+    fafb <- abs(fb - fa)
     ab <- abs(b - a)
     rv$df = tribble(
       ~ "a",
@@ -222,9 +238,9 @@ server <- function(input, output, session) {
       a = a,
       c = c,
       b = b,
-      "f(a)" = fkt(a),
-      "f(c)" = fkt(c),
-      "f(b)" = fkt(b),
+      "f(a)" = fa,
+      "f(c)" = fc,
+      "f(b)" = fb,
       "f(a)*f(c)" = fac,
       "|b-a|" = ab,
       "|f(b)-f(a)|" = fafb
@@ -241,8 +257,8 @@ server <- function(input, output, session) {
     a <- rv$a
     b <- rv$b
     if (is.null(a) | is.null(b)) {
-      a <- input$a
-      b <- input$b
+      a <- data()$a
+      b <- data()$b
       flag <- TRUE
     }
     if (a > b) {
@@ -250,8 +266,17 @@ server <- function(input, output, session) {
       a <- b
       b <- a
     }
+    c <- rv$c
+    fa <- fkt(a)
+    fb <- fkt(b)
+    fc <- fkt(c)
+    error <- FALSE
+    if (flag) {
+      error <- fa*fb >= 0
+      break
+    }
     c <- (a + b) / 2
-    fac = fkt(a) * fkt(c)
+    fac = fa * fkt(c)
     old_a <- a
     old_b <- b
     if (!flag) {
