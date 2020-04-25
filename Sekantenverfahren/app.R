@@ -42,6 +42,7 @@ library(mosaic)
 library(mosaicCalc)
 library(xtable)
 library(shinycssloaders) # Added package for spinner (see below)
+library(kableExtra)
 
 
 # Define UI for application that draws a histogram
@@ -79,7 +80,7 @@ ui <- fluidPage(
     mainPanel(
       tabsetPanel(
         tabPanel("Plot", plotOutput("functionPlot") %>% withSpinner(color = '#387F72')),
-        tabPanel("Table", tableOutput("functionTable") %>% withSpinner(color = '#387F72')),
+        tabPanel("Table", tableOutput("functionTable")  %>% withSpinner(color = '#387F72')),
         tabPanel("Hintergrund",
                  fluidPage(
                    titlePanel("FOMshiny: Sekantenverfahren"),
@@ -178,14 +179,21 @@ server <- function(input, output, session) {
   })
   
   
-  output$functionTable <- renderTable({
-    input$update
-    tibble::rowid_to_column(as.data.frame(rv$df))
-  },
-  align = "r",
-  digits = 4,
-  display = rep("G", 8)
-  )
+#  output$functionTable <- renderTable({
+#  },
+#  align = "r",
+#  digits = 4,
+#  display = rep("G", 8)
+#  )
+ 
+  output$functionTable <- function() {   
+    req(input$update)
+    req(rv)
+    tibble::rowid_to_column(as.data.frame(rv$df)) %>%
+      knitr::kable("html") %>%
+      kable_styling(bootstrap_options = c("striped", "hover", "responsive"), fixed_thead = T)
+  } 
+  
   
   output$functionPlot <- renderPlot({
     input$update
