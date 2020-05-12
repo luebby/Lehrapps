@@ -112,7 +112,7 @@ ui = dashboardPage(
                    plotOutput("PlotEnt50")),
             column(6, 
                    h4("Verteilung Mittelwert Entfernung", align = "center"),
-                   plotOutput("PlotMeanVer50"))
+                   plotOutput("PlotMeanEnt50"))
           )
         ),
         fluidRow(
@@ -125,7 +125,7 @@ ui = dashboardPage(
                    plotOutput("PlotVer50")),
             column(6, 
                    h4("Verteilung Anteil Verspätung", align = "center"),
-                   plotOutput("PlotMeanEnt50"))
+                   plotOutput("PlotMeanVer50"))
           )
         )
       ),
@@ -155,7 +155,7 @@ ui = dashboardPage(
                    plotOutput("PlotEnt500")),
             column(6, 
                    h4("Verteilung Mittelwert Entfernung", align = "center"),
-                   plotOutput("PlotMeanVer500"))
+                   plotOutput("PlotMeanEnt500"))
           )
         ),
         fluidRow(
@@ -168,7 +168,7 @@ ui = dashboardPage(
                    plotOutput("PlotVer500")),
             column(6, 
                    h4("Verteilung Anteil Verspätung", align = "center"),
-                   plotOutput("PlotMeanEnt500"))
+                   plotOutput("PlotMeanVer500"))
           )
         )
       )
