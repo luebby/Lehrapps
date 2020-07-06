@@ -80,19 +80,25 @@ server <- function(input, output) {
     
     output$checkTable <- renderText({
         inFile <- input$inFile
+        correctColNumber = 2
+        correctRowNumber = 100
         if (is.null(inFile)) {
             return("<p class=\"error\">Noch keine Datei hochgeladen!<p>")
         }
         df <- read.csv2(inFile$datapath, header = input$header)
         ausgabe <- ""
         x <- 0
-        if (nrow(df) != 100) {
-            ausgabe <- "<p class=\"error\">Die Antwort muss 81 Zeilen enthalten!</p>"
+        if (nrow(df) != correctRowNumber) {
+            ausgabe <- paste("<p class=\"error\">Die Antwort muss", 
+                             correctRowNumber, 
+                             "Beobachtungen (Zeilen) enthalten!</p>")
             x <- 1
         }
-        if (ncol(df) != 2) {
+        if (ncol(df) != correctColNumber) {
             ausgabe <- paste(ausgabe, 
-                             "<p class=\"error\">Die Antwort muss 2 Spalten enthalten!</p>", 
+                             paste("<p class=\"error\">Die Antwort muss",
+                                    correctColNumber, 
+                                    "Variabeln (Spalten) enthalten!</p>"), 
                              sep = "\r\n")
             x <- x + 2
         }
