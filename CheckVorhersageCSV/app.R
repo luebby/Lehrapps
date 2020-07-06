@@ -92,7 +92,7 @@ server <- function(input, output) {
             ausgabe <- paste("<p class=\"error\">Die Antwort muss", 
                              correctRowNumber, 
                              "Beobachtungen (Zeilen) enthalten!</p>")
-            x <- 1
+            x <- x + 1
         }
         if (ncol(df) != correctColNumber) {
             ausgabe <- paste(ausgabe, 
@@ -102,7 +102,7 @@ server <- function(input, output) {
                              sep = "\r\n")
             x <- x + 2
         }
-        if (x == 2) {
+        if (x == 0) {
             ausgabe <- "<p class=\"okay\">Alles okay!</p>"
         }
         if (DEBUG) {
