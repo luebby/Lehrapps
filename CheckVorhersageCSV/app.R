@@ -82,6 +82,14 @@ server <- function(input, output) {
         inFile <- input$inFile
         correctColNumber = 2
         correctRowNumber = 100
+        set.seed(1896)
+        magicRows <- c(2,   4,   6,   7,  15,  17,  19,  23,  25,  27,  29,  33,
+                       34,  35,  38,  41,  44,  53,  55,  58,  60,  63,  65,  
+                       70,  74,  79,  83,  85,  90,  92,  96,  99, 100)
+        magicValues <- c(582, 1077,  628,  927, 1614, 1652,  791,  513,  572,  
+                         733,  863,  769,  652, 2496,  729,  675, 1378,  493,  
+                         433, 1021,  986,  768,  857,  676,  936, 4549,  253,  
+                         326, 3180,    9,  413, 5906, 1401)
         if (is.null(inFile)) {
             return("<p class=\"error\">Noch keine Datei hochgeladen!<p>")
         }
@@ -104,6 +112,12 @@ server <- function(input, output) {
         }
         if (x == 0) {
             ausgabe <- "<p class=\"okay\">Alles okay!</p>"
+            mea <- round(sum(abs(df[magicRows, ]-magicValues)),4)
+            ausgabe <- paste(ausgabe, 
+                            paste("<p class=\"mea\">MEA_{1/3} = ",
+                                  mea,
+                                  "</p>", sep=" "),
+                             sep="\r\n")
         }
         if (DEBUG) {
             paste(ausgabe, nrow(df), ncol(df), sep = "\r\n")
