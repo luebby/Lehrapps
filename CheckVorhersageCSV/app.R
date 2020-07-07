@@ -1,5 +1,5 @@
 # ===========================================================================
-# app.R (Release 0.1)
+# app.R (Release 0.5)
 # =====----------------------------------------------------------------------
 #
 # Check Vorhersagen CDV
@@ -8,6 +8,7 @@
 # (W) by Norman Markgraf in 2020
 #
 # 06. Jul. 2020  (nm)  Aller erste Version (0.1)
+# 07. Jul. 2020  (nm)  Jetzt mit MAE_{1/3} und MAE_{Nullmodell} (0.5)
 #
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
@@ -90,7 +91,7 @@ server <- function(input, output) {
                          733,  863,  769,  652, 2496,  729,  675, 1378,  493,  
                          433, 1021,  986,  768,  857,  676,  936, 4549,  253,  
                          326, 3180,    9,  413, 5906, 1401)
-        magixMean <- 1491.325
+        magixmaen <- 1491.325
         magicRoundDigits <- 0
         if (is.null(inFile)) {
             return("<p class=\"error\">Noch keine Datei hochgeladen!<p>")
@@ -107,22 +108,22 @@ server <- function(input, output) {
         if (ncol(df) != correctColNumber) {
             ausgabe <- paste(ausgabe, 
                              paste("<p class=\"error\">Die Antwort muss",
-                                    correctColNumber, 
-                                    "Variabeln (Spalten) enthalten!</p>"), 
+                                   correctColNumber, 
+                                   "Variabeln (Spalten) enthalten!</p>"), 
                              sep = "\r\n")
             x <- x + 2
         }
         if (x == 0) {
             ausgabe <- "<p class=\"okay\">Alles okay!</p>"
-            mea <- round(sum(abs(df[[2]][magicRows] - magicValues)), magicRoundDigits)
-            mea.null <- round(sum(abs(rep(magixMean, 33)-magicValues)), magicRoundDigits)
+            mae <- round(sum(abs(df[[2]][magicRows] - magicValues)), magicRoundDigits)
+            mae.null <- round(sum(abs(rep(magixmaen, 33) - magicValues)), magicRoundDigits)
             ausgabe <- paste(ausgabe, 
-                            paste("<p class=\"mea\">MEA_{1/3} = ",
-                                  mea,
-                                  "</p>", sep = " "),
-                            paste("<p class=\"mea\">MEA_{Nullmodell} = ",
-                                  mea.null,
-                                  "</p>", sep = " "),
+                             paste("<p class=\"mae\">MAE_{1/3} = ",
+                                   mae,
+                                   "</p>", sep = " "),
+                             paste("<p class=\"mae\">MAE_{Nullmodell} = ",
+                                   mae.null,
+                                   "</p>", sep = " "),
                              sep = "\r\n")
         }
         if (DEBUG) {
