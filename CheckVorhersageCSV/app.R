@@ -39,7 +39,7 @@
 library(shiny)
 
 options(shiny.maxRequestSize = 100*1024^2)
-DEBUG <- FALSE
+DEBUG <- TRUE
 
 
 # Define UI for application that draws a histogram
@@ -114,7 +114,7 @@ server <- function(input, output) {
         }
         if (x == 0) {
             ausgabe <- "<p class=\"okay\">Alles okay!</p>"
-            mea <- round(sum(abs(df[magicRows, ]-magicValues)), magicRoundDigits)
+            mea <- round(sum(abs(df[[2]][magicRows] - magicValues)), magicRoundDigits)
             mea.null <- round(sum(abs(rep(magixMean, 33)-magicValues)), magicRoundDigits)
             ausgabe <- paste(ausgabe, 
                             paste("<p class=\"mea\">MEA_{1/3} = ",
@@ -126,7 +126,9 @@ server <- function(input, output) {
                              sep = "\r\n")
         }
         if (DEBUG) {
-            paste(ausgabe, nrow(df), ncol(df), sep = "\r\n")
+            werte <- df[[2]][magicRows]
+            print(werte)
+            paste(ausgabe, nrow(df), ncol(df),  sep = "\r\n")
         } else {
             ausgabe
         }
