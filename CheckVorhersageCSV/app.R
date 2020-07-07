@@ -90,6 +90,8 @@ server <- function(input, output) {
                          733,  863,  769,  652, 2496,  729,  675, 1378,  493,  
                          433, 1021,  986,  768,  857,  676,  936, 4549,  253,  
                          326, 3180,    9,  413, 5906, 1401)
+        magixMean <- 1491.325
+        magicRoundDigits <- 0
         if (is.null(inFile)) {
             return("<p class=\"error\">Noch keine Datei hochgeladen!<p>")
         }
@@ -112,12 +114,16 @@ server <- function(input, output) {
         }
         if (x == 0) {
             ausgabe <- "<p class=\"okay\">Alles okay!</p>"
-            mea <- round(sum(abs(df[magicRows, ]-magicValues)),4)
+            mea <- round(sum(abs(df[magicRows, ]-magicValues)), magicRoundDigits)
+            mea.null <- round(sum(abs(rep(magixMean, 33)-magicValues)), magicRoundDigits)
             ausgabe <- paste(ausgabe, 
                             paste("<p class=\"mea\">MEA_{1/3} = ",
                                   mea,
-                                  "</p>", sep=" "),
-                             sep="\r\n")
+                                  "</p>", sep = " "),
+                            paste("<p class=\"mea\">MEA_{Nullmodell} = ",
+                                  mea.null,
+                                  "</p>", sep = " "),
+                             sep = "\r\n")
         }
         if (DEBUG) {
             paste(ausgabe, nrow(df), ncol(df), sep = "\r\n")
