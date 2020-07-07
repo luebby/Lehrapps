@@ -39,7 +39,7 @@
 library(shiny)
 
 options(shiny.maxRequestSize = 100*1024^2)
-DEBUG <- TRUE
+DEBUG <- FALSE
 
 
 # Define UI for application that draws a histogram
