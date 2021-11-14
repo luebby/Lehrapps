@@ -112,8 +112,8 @@ server <- function(input, output) {
 
                 # residuals
         myscore <- 0
-        
-        for (k in 1:dim(mydata)[1]) {
+        n <- dim(mydata)[1]
+        for (k in 1:n) {
           residuals <- rbind( mydata[k,], c(mydata[k,1], proj[k]) )
           # print(str(residuals))
           plt %>% gf_line(y ~ x, color = "purple", data = residuals) -> plt
@@ -123,14 +123,14 @@ server <- function(input, output) {
         }
         
         plt %>% gf_labs(
-          title = paste("Ihr Score: ", round(myscore/(dim(mydata)[1]),2))
+          title = paste("Ihr Score: ", format(round(myscore/n,2), big.mark=".", decimal.mark=","))
         ) -> plt
         
         output$check <- renderText(
           paste("Ihre Gleichung: y = ", 
-                round(fit$coefficients[1],2), 
+                format(round(fit$coefficients[1],2), big.mark=".", decimal.mark=","), 
                 "+",
-                round(fit$coefficients[2],2),
+                format(round(fit$coefficients[2],2), big.mark=".", decimal.mark=","),
                 intToUtf8(183), # UTF-8 int für &centerdot;
                 "x"))
       }
