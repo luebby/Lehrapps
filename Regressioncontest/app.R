@@ -119,12 +119,13 @@ server <- function(input, output) {
           plt %>% gf_line(y ~ x, color = "purple", data = residuals) -> plt
           # lines(residuals, col = 'purple')
           
-          myscore <- myscore + (mydata[k,1] - proj[k])^2
+          myscore <- myscore + (mydata[k,2] - proj[k])^2
         }
         
         plt %>% gf_labs(
           title = paste("Ihr Score: ", round(myscore/(dim(mydata)[1]),2))
         ) -> plt
+        
         output$check <- renderText(
           paste("Ihre Gleichung: y = ", 
                 round(fit$coefficients[1],2), 
