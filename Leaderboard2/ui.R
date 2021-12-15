@@ -8,10 +8,11 @@
 #
 
 library(shiny)
+library(shinyjs)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-
+    useShinyjs(debug=TRUE),
     # Application title
     titlePanel("Leaderboard - First Test"),
 

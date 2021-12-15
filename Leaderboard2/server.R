@@ -10,6 +10,8 @@
 library(shiny)
 library(mosaic)
 library(DT)
+library(lubridate)
+library(shinyjs)
 
 LEADERBORD_PATH <- "data/leaderboard.csv"
 
@@ -27,26 +29,31 @@ if (file.exists(LEADERBORD_PATH)) {
 
 update_leaderboard <- function(input) {
   submitted_input <- input$NutzerInnenName
-  if (is.null(submitted_input) || submitted_input == "") {
-    print("Just return Data!")
-  } else {
-    print("Add Data!")
+  if (!(is.null(submitted_input) || submitted_input == "")){
     score <- input$NutzerInnenWert
     submitter <- input$NutzerInnenName
     submit_date <- strftime(as.POSIXlt(Sys.time(), "UTC"), "%Y-%m-%dT%H:%M:%S%z")
-    # submittion <- read.csv(submitted_input$datapath, header = FALSE)[1]
-    # score <- submittion
     df_leaderboard <<- rbind(
       df_leaderboard, 
       c(list(submitter = submitter, submission_date = submit_date, score = score)))
     write.csv(df_leaderboard, LEADERBORD_PATH, row.names = FALSE)
   }
-  return(df_leaderboard)
+  
+  # Nur die Daten vom aktuellen Tag anzeigen!
+  filterdate <- round_date(today(), "day")
+  
+  return(
+    df_leaderboard %>% 
+      filter(round_date(date(submission_date), "day") == filterdate)
+  )
   
 }
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
+  observeEvent(input$NutzerInnenWert, {
+    shinyjs::disable("NutzerInnenWert")
+  })
   
   # Data to show
   read.csv("data/socialdata.csv",
