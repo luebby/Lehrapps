@@ -31,8 +31,8 @@ shinyUI(
                                  p("Im Beispiel Kneipe statt Hörsaal, führte eine Stichprobe von $n = 34$ einen Dreieckstest durch.",
                                    "12 der TeilnehmerInnen tippten das andere Bier korrekt.",
                                    "Somit gehen wir vorläufig davon aus, dass der Geschmacksunterschied nicht groß war.",
-                                   "Wie groß hätte die Stichprobe sein müssen, dass der kleine Effekt des Geschmacksunterschieds dennoch hätte eruiert werden können?",
-                                   "Wie ändert sich die Stichprobengröße, wenn sich der Anteil unter H0 oder der Stichprobe verändert?",
+                                   "Wie groß hätte die Stichprobe sein müssen, dass ein kleiner Effekt des Geschmacksunterschieds dennoch hätte eruiert werden können?",
+                                   "Wie ändert sich die Stichprobengröße, wenn sich der Anteil unter $H_0$ ($\\pi_0$) oder der wahre Anteil $\\pi$ verändert?",
                                    "Was passiert, wenn die Power ($1-\\beta$) höher oder niedriger wird?"
                                  )
                           )
@@ -55,7 +55,7 @@ shinyUI(
                             fluidRow(
                               column(12, 
                                      h4("Parameter"),
-                                     sliderInput("p1", "Anteil Stichprobe ($p$)", value = 12/34, min = 0.1, max = 0.9, step = 0.001),
+                                     sliderInput("p1", "Wahrer Anteil ($\\pi$)", value = 12/34, min = 0.1, max = 0.9, step = 0.001),
                                      sliderInput("p2", "Anteil $H_0$ ($\\pi_0$)", value = 1/3, min = 0.1, max = 0.9, step = 0.001),
                                      sliderInput("alpha", "Signifikanzniveau ($\\alpha$)", value = 0.05, min = 0.01, max = 0.15, step = 0.01),
                                      sliderInput("power", "Power ($1-\\beta$)", value = 0.8, min = 0.15, max = 0.9, step = 0.01)
