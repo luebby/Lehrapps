@@ -22,11 +22,11 @@ shinyUI(
             column(
               12,
               h3("Hintergrund"),
-              p("Das Signifikanzniveau alpha einer Hypothesenprüfung sagt, wie oft Sie maximal die Nullhypothese verwerfen wollen, obwohl sie gilt.",
+              p("Das Signifikanzniveau $\\alpha$ einer Hypothesenprüfung sagt, wie oft Sie maximal die Nullhypothese verwerfen wollen, obwohl sie gilt.",
                 "Die Nullhypothese zu verwerfen, obwohl sie gilt nennt man $\\alpha$-Fehler oder Fehler 1. Art.",
                 "Ein $\\beta$-Fehler oder Fehler 2. Art liegt vor, wenn man $H_0$ nicht verwirft, obwohl $H_0$ nicht gilt.",
                 "Die Power ($1-\\beta$) eines Test ist die Wahrscheinlichkeit eine Nullhypothese zu verwerfen, die in der Tat nicht stimmt.",
-                "Die Power hängt ab von dem wahren Wert (Effekt), alpha - und dem Stichprobenumfang $n$.",
+                "Die Power hängt ab von dem wahren Wert (Effekt), $\\alpha$ - und dem Stichprobenumfang $n$.",
                 "Allgemein gilt: je größer $n$, desto größer ist die Power (da der Standardfehler sinkt), je größer die Abweichung zu $H_0$ (Effekt), desto größer die Power,",
                 "je größer $\\alpha$, desto größer die Power (da $H_0$ leichter verworfen wird). Die genaue Funktion des Zusammenhangs hängt von der angenommenen Verteilung ab.",
                 "Man kann aber auch anhand der gewünschten Power und Annahmen über den wahren Wert den nötigen Stichprobenumfang ausrechnen."
