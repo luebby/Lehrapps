@@ -41,14 +41,14 @@ shinyUI(
              ),
              tabPanel("Kneipe statt Hörsaal", 
                       withMathJax(),
-                      # section below allows in-line LaTeX via $ in mathjax. Replace less-than-sign with < 
+                      # section below allows in-line LaTeX via $ in mathjax. Replace less-than-sign with <
                       # and grater-than-sign with >
                       tags$div(HTML("<script type='text/x-mathjax-config'>
-                MathJax.Hub.Config({
-                tex2jax: {inlineMath: [['$','$']]}
-                });
-                </script>
-                ")),
+          MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$']]}
+        });
+        </script>
+        ")),
                       fluidPage(
                         sidebarLayout(
                           sidebarPanel(
@@ -63,8 +63,14 @@ shinyUI(
                             )
                           ),
                           mainPanel(
-                            fluidRow(column(12, plotOutput("Plotpwr"))),
-                            fluidRow(column(12, "Stephane Champely (2018). pwr: Basic Functions for Power Analysis. R package version 1.2-2. https://CRAN.R-project.org/package=pwr"))
+                            fluidRow(
+                              column(12, 
+                                     plotOutput("Plotpwr"),
+                                     p("Stephane Champely (2018). pwr: Basic Functions for Power Analysis. R package version 1.2-2. ",
+                                       a("https://CRAN.R-project.org/package=pwr", href="https://CRAN.R-project.org/package=pwr"),
+                                       "")
+                              )
+                            )
                           )
                         )
                       )
