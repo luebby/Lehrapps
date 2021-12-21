@@ -33,7 +33,7 @@ shinyUI(fluidPage(
             ),
             actionButton(
               "submitScore",
-              "Score aktualisieren!" #, icon("rsync")
+              "Score aktualisieren!", icon("rsync")
             ),
             verbatimTextOutput("value"),
             fluidRow(
