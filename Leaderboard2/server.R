@@ -56,7 +56,7 @@ shinyServer(function(input, output, session) {
   })
   
   # Data to show
-  read.csv("data/socialdata.csv",
+  read.csv("data/energy.csv",
            colClasses = c("numeric", "numeric"),
            col.names = c("x", "y")
   ) %>% mutate( type = "data") -> mydata
@@ -89,6 +89,7 @@ shinyServer(function(input, output, session) {
   # Plot is available
   output$plot1 <- renderPlot({
     gf_point(y ~ x, data = filter(mydata, type == "data")) %>%
+      gf_labs(x = "Temperatur", y = "Verbrauch") %>%
       gf_theme(theme_classic())
   })
   
