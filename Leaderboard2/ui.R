@@ -14,7 +14,7 @@ library(shinyjs)
 shinyUI(fluidPage(
     useShinyjs(debug=TRUE),
     # Application title
-    titlePanel("Verbrauchprognose"),
+    titlePanel("Verbrauchsprognose"),
     h3("Ihr Auftrag:"),
     p("Sie sind Einkäufer:in in einem Energieunternehmen. Sie kaufen die Energie ein, die Ihre Kund:innen benötigen. 
     Der Energieverbrauch hängt ab von der Temperatur. Diesen Zusammenhang wollen Sie ausnutzen um bedarfsgerecht einzukaufen.
@@ -23,7 +23,8 @@ shinyUI(fluidPage(
       Kaufen Sie optimal ein, mit möglichst geringem Verlust (Score)"),
     p("Tun Sie dies indem Sie zwei Punkte auf der Abbildung klicken und diese werden mit einer Gerade verbunden. 
      Eine neue Linie entsteht wenn Sie noch einmal klicken. Je niedriger Ihr Score desto besser!"),
-    p("Wenn Sie zufrieden sind, geben Sie einen Namen ein und klicken Sie auf 'Score aktualisieren!'. Wie gut ist Ihr Modell? Sind Sie besser als die Künstliche Intelligenz von Dr. Stat?"),
+    p("Wenn Sie zufrieden sind, geben Sie einen Namen ein und klicken Sie auf 'Score aktualisieren!'. 
+      Wie gut ist Ihr Modell? Sind Sie besser als die Künstliche Intelligenz von Frau Dr. Stat?"),
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
