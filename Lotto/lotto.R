@@ -24,9 +24,7 @@ Richtige <- function(data) {
     rowwise(ziehung) %>%
     summarise(richtige = sum(data %in% c(z1,z2,z3,z4,z5,z6))) %>%
     ungroup() %>%
-    count(richtige) %>%
-    rename('Anzahl Richtige' = 'richtige',
-           'Anzahl Ziehungen' = 'n')
+    count(richtige) 
   return(richtige)
 }
 
@@ -69,7 +67,7 @@ ui <- dashboardPage(
     useShinyjs(),
     h3("Hinweis:"),
     p("Wählen Sie 6 aus 49 Zahlen aus. Ihre Auswahl wird bei einem Klick auf Abgabe gespeichert. 
-      Dabei keine personenbeziehbaren Daten gespeichert."),
+      Dabei werden keine personenbeziehbaren Daten gespeichert."),
     p("Die ausgewählten Zahlen werden zu Lehr- und Forschungszwecken ausgewertet."),
     verbatimTextOutput("test_box"),
     p("Ihre gewählten Zahlen werden mit den Lottozahlen der Jahre 1955 bis 2021 abgeglichen."),
@@ -82,7 +80,9 @@ ui <- dashboardPage(
     tweaks,
     fluidRow(
       column(width = 12, controls),
-      column(12,tableOutput('table'))
+      column(6,tableOutput('table')),
+      column(3,tableOutput('mean')),
+      column(3,tableOutput('prop')),
     )
   )
 )
@@ -101,11 +101,36 @@ server <- function(input, output) {
         {saveData(lotto_data())
         richtige <- Richtige(lotto_data())
         output$table <- function()
-          {richtige %>%       
-          kable("html") %>%
-          kable_styling("striped", full_width = F)}
-        
+          {richtige %>%
+            rename('Anzahl Richtige' = 'richtige',
+                   'Anzahl Ziehungen' = 'n') %>%
+            kable("html") %>%
+            kable_styling("striped", full_width = F)}
         # output$table <- renderTable(richtige)
+        
+        output$mean <- function()
+        {
+          richtige %>%
+            summarise("Mittelwert Anzahl Richtige" = weighted.mean(richtige, n)) %>%
+            kable("html") %>%
+            kable_styling("striped", full_width = F)
+        }
+        
+        output$prop <- function()
+        {
+          gesamt <- richtige %>%
+            summarise(ziehungen = sum(n))
+          
+          richtige %>%
+            filter(richtige >=3) %>%
+            summarise(gewinne = sum(n)) %>%
+            mutate("Anteil Ziehungen mit Gewinn" = gewinne / gesamt$ziehungen) %>%
+            select(-gewinne) %>%
+            kable("html") %>%
+            kable_styling("striped", full_width = F)
+        }
+        
+        
         }
       })
     
