@@ -45,8 +45,7 @@ tweaks <-
 
 all_rows <- as.numeric(t(matrix(1:49, ncol = 7)))
 controls <-
-  list(h3("Auswahl 6 aus 49"), 
-       tags$div(align = 'left', 
+  list(tags$div(align = 'left', 
                 class = 'multicol', 
                 checkboxGroupInput(inputId  = 'numSelector', 
                                    label = NULL,
@@ -79,7 +78,9 @@ ui <- dashboardPage(
   dashboardBody(
     tweaks,
     fluidRow(
+      h3("Auswahl 6 aus 49:"), 
       column(width = 12, controls),
+      h3("Auswertung Abgabe:"),
       column(6,tableOutput('table')),
       column(3,tableOutput('mean')),
       column(3,tableOutput('prop')),
