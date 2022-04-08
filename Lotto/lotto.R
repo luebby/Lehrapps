@@ -1,6 +1,7 @@
 library(shiny)
 library(shinydashboard)
 library(shinyjs)
+library(shinycssloaders) # für das Einbauen eines Wartezeichens bei Update der Eingabeparameter
 library(googlesheets4)
 library(dplyr)
 library(knitr)
@@ -81,9 +82,10 @@ ui <- dashboardPage(
       h3("Auswahl 6 aus 49:"), 
       column(width = 12, controls),
       h3("Auswertung Abgabe:"),
-      column(6,tableOutput('table')),
-      column(3,tableOutput('mean')),
-      column(3,tableOutput('prop')),
+      ## withSpinner: Wartezeichen beim Update des Output hinzufügen mit Ausblendeoption vor erstmaliger Auswertung
+      column(6, hidden(div(id = 'outp1', withSpinner(tableOutput('table'), type = 7)))),
+      column(3, hidden(div(id = 'outp2', withSpinner(tableOutput('mean'), type = 7)))),
+      column(3, hidden(div(id = 'outp3', withSpinner(tableOutput('prop'), type = 7)))),
     )
   )
 )
@@ -98,9 +100,30 @@ server <- function(input, output) {
     
     # Wenn Abgabe, dann speichern und Ergebnis berichten
     observeEvent(input$go, {
+      ## vor der erstmaligen Parameterauswahl das Wartezeichen ausblenden
+      toggle(id = 'outp1', condition = FALSE)
+      toggle(id = 'outp2', condition = FALSE)
+      toggle(id = 'outp3', condition = FALSE)
+      
       if(length(input$numSelector)==6)
         {saveData(lotto_data())
         richtige <- Richtige(lotto_data())
+        
+        ## Auswahl nach dem Abschicken wieder entfernen, um eine komplette Neuauswahl starten zu können
+        updateCheckboxGroupInput(getDefaultReactiveDomain(), "numSelector",
+                                 label = NULL,
+                                 choices  = all_rows,
+                                 inline   = FALSE,
+                                 selected = NULL)
+        
+        ## Wartezeichen anzeigen während die Ausgabe geupdated wird
+        show('outp1')
+        show('outp2')
+        show('outp3')
+        toggle(id = 'outp1', condition = TRUE)
+        toggle(id = 'outp1' , condition = TRUE)
+        toggle(id = 'outp1' , condition = TRUE)
+        
         output$table <- function()
           {richtige %>%
             rename('Anzahl Richtige' = 'richtige',
