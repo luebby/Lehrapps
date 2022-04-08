@@ -110,7 +110,7 @@ server <- function(input, output) {
       if(length(input$numSelector)==6)
         {saveData(lotto_data())
         richtige <- Richtige(lotto_data())
-        zahlen <- sort(lotto_data()) %>% data.frame() %>% rename("Zahlen" = ".")
+        zahlen <- as.numeric(lotto_data()) %>% data.frame() %>% rename("Zahlen" = ".") %>% arrange(Zahlen)
         
         ## Auswahl nach dem Abschicken wieder entfernen, um eine komplette Neuauswahl starten zu können
         updateCheckboxGroupInput(getDefaultReactiveDomain(), "numSelector",
