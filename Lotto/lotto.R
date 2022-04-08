@@ -83,7 +83,8 @@ ui <- dashboardPage(
       column(width = 12, controls),
       h3("Auswertung Abgabe:"),
       ## withSpinner: Wartezeichen beim Update des Output hinzufügen mit Ausblendeoption vor erstmaliger Auswertung
-      column(6, hidden(div(id = 'outp1', withSpinner(tableOutput('table'), type = 7)))),
+      column(2, hidden(div(id = 'outp4', withSpinner(tableOutput('zahlen'), type = 7)))),
+      column(4, hidden(div(id = 'outp1', withSpinner(tableOutput('table'), type = 7)))),
       column(3, hidden(div(id = 'outp2', withSpinner(tableOutput('mean'), type = 7)))),
       column(3, hidden(div(id = 'outp3', withSpinner(tableOutput('prop'), type = 7)))),
     )
@@ -104,10 +105,12 @@ server <- function(input, output) {
       toggle(id = 'outp1', condition = FALSE)
       toggle(id = 'outp2', condition = FALSE)
       toggle(id = 'outp3', condition = FALSE)
+      toggle(id = 'outp4', condition = FALSE)
       
       if(length(input$numSelector)==6)
         {saveData(lotto_data())
         richtige <- Richtige(lotto_data())
+        zahlen <- sort(lotto_data()) %>% data.frame() %>% rename("Zahlen" = ".")
         
         ## Auswahl nach dem Abschicken wieder entfernen, um eine komplette Neuauswahl starten zu können
         updateCheckboxGroupInput(getDefaultReactiveDomain(), "numSelector",
@@ -120,9 +123,19 @@ server <- function(input, output) {
         show('outp1')
         show('outp2')
         show('outp3')
+        show('outp4')
+        
         toggle(id = 'outp1', condition = TRUE)
-        toggle(id = 'outp1' , condition = TRUE)
-        toggle(id = 'outp1' , condition = TRUE)
+        toggle(id = 'outp2', condition = TRUE)
+        toggle(id = 'outp3', condition = TRUE)
+        toggle(id = 'outp4', condition = TRUE)
+        
+        output$zahlen <- function()
+        {
+          data.frame(zahlen) %>%
+            kable("html") %>%
+            kable_styling("striped", full_width = F)
+        }
         
         output$table <- function()
           {richtige %>%
