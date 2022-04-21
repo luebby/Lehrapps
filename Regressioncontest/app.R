@@ -83,7 +83,8 @@ server <- function(input, output) {
       plt <- gf_point(y ~ x, 
                       color = ~type, 
                       show.legend = FALSE,
-                      data = rbind(mydata, clicked_points)) 
+                      data = rbind(mydata, clicked_points))   %>%
+        gf_labs(x="Temperatur", y="Verbrauch")
       
       # plot(mydata$x, mydata$y, xlab = 'x', ylab = 'y', pch = 16, asp = 1)
       # points(click_saved$singleclick[,1], click_saved$singleclick[,2], col = 'red', pch = 16)
@@ -107,7 +108,8 @@ server <- function(input, output) {
         plt <- gf_point(y ~ x, 
                         color = ~type, 
                         show.legend = FALSE,
-                        data = rbind(mydata, clicked_points, proj_data)) 
+                        data = rbind(mydata, clicked_points, proj_data))  %>%
+          gf_labs(x="Temperatur", y="Verbrauch")
         #points(mydata$x, proj, col = 'purple')
 
         # Zeichne Gerade durch die zwei geklickten Punkte:
