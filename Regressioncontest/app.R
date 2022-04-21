@@ -19,11 +19,14 @@ ui <- fluidPage(
   
   # Sidebar with a slider input for number of bins 
   h3("Ihr Auftrag:"),
-  p("Mit Hilfe Ihrer menschlichen Intelligenz: Finden Sie den Zusammenhang zwischen x und y, 
-     zwischen der Anzahl Kontakte bei Facebook und Instagram!"),
+  p("Sie sind Einkäufer:in in einem Energieunternehmen. Sie kaufen die Energie ein, die Ihre Kund:innen benötigen. 
+    Der Energieverbrauch hängt ab von der Temperatur. Diesen Zusammenhang wollen Sie ausnutzen um bedarfsgerecht einzukaufen.
+      Kaufen Sie zu viel ein, müssen Sie mit Verlust weiterkaufen, kaufen Sie zu wenig müssen Sie mit Verlust nachkaufen."),
+  p("Mit Hilfe Ihrer menschlichen Intelligenz: Finden Sie den Zusammenhang zwischen der Temperatur und dem Verbrauch! 
+      Kaufen Sie optimal ein, mit möglichst geringem Verlust (Score)"),
   p("Tun Sie dies indem Sie zwei Punkte auf der Abbildung klicken und diese werden mit einer Gerade verbunden. 
      Eine neue Linie entsteht wenn Sie noch einmal klicken. Je niedriger Ihr Score desto besser!"),
-  p(strong("Sind Sie besser als die Künstliche Intelligenz von Dr. Stat?")),
+  p("Sind Sie besser als die Künstliche Intelligenz von Frau Dr. Stat?"),
   # 
   # h5("IF YOU WANT TO LOAD YOUR DATA..."),
   # h6("Check the box if your data file has a header. Choose a CSV File with at least two numerical columns and then click on the plot. 
@@ -47,7 +50,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   # available data
-  read.csv("data/socialdata.csv",
+  read.csv("data/energy.csv",
            colClasses = c("numeric", "numeric"),
            col.names = c("x", "y")
            ) %>% mutate( type = "data") -> mydata
@@ -58,6 +61,7 @@ server <- function(input, output) {
   output$plot1 <- renderPlot({
     # plot(mydata$x, mydata$y, xlab = 'x', ylab = 'y', pch = 16, asp = 1)
     gf_point(y ~ x, data = filter(mydata, type == "data")) %>%
+      gf_labs(x="Temperatur", y="Verbrauch") %>%
       gf_theme(theme_classic())
   })
   
@@ -129,8 +133,8 @@ server <- function(input, output) {
         output$check <- renderText(
           paste("Ihre Gleichung: y = ", 
                 format(round(fit$coefficients[1],2), big.mark=".", decimal.mark=","), 
-                "+",
-                format(round(fit$coefficients[2],2), big.mark=".", decimal.mark=","),
+                ifelse(fit$coefficients[2]>0,"+","-"),
+                format(abs(round(fit$coefficients[2],2)), big.mark=".", decimal.mark=","),
                 intToUtf8(183), # UTF-8 int für &centerdot;
                 "x"))
       }
@@ -173,3 +177,31 @@ shinyApp(ui = ui, server = server)
 # 
 # > mean(erg$residuals^2)
 # [1] 23318.25
+
+
+###################
+# > d <- read.csv("Regressioncontest/data/energy.csv")
+# > erg <- lm(consumption ~ temperature, data = d)
+# > summary(erg)
+# 
+# Call:
+#   lm(formula = consumption ~ temperature, data = d)
+# 
+# Residuals:
+#   Min       1Q   Median       3Q      Max 
+# -188.089  -35.992   -6.682   19.571  262.090 
+# 
+# Coefficients:
+#   Estimate Std. Error t value Pr(>|t|)    
+# (Intercept) 8120.604     15.166  535.45   <2e-16 ***
+#   temperature  -18.440      1.673  -11.02   <2e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Residual standard error: 69.42 on 78 degrees of freedom
+# Multiple R-squared:  0.609,	Adjusted R-squared:  0.6039 
+# F-statistic: 121.5 on 1 and 78 DF,  p-value: < 2.2e-16
+# 
+# > mean(erg$residuals^2)
+# [1] 4698.928
+
