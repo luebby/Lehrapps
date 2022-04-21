@@ -133,12 +133,12 @@ server <- function(input, output) {
         ) -> plt
         
         output$check <- renderText(
-          paste("Ihre Gleichung: y = ", 
+          paste("Ihre Gleichung: Verbrauch = ", 
                 format(round(fit$coefficients[1],2), big.mark=".", decimal.mark=","), 
                 ifelse(fit$coefficients[2]>0,"+","-"),
                 format(abs(round(fit$coefficients[2],2)), big.mark=".", decimal.mark=","),
                 intToUtf8(183), # UTF-8 int für &centerdot;
-                "x"))
+                "Temperatur"))
       }
       our_colors <- c("data" = "black", "clicked" = "red", "residuals" = "purple")
       plt %>% 
