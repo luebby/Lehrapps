@@ -39,6 +39,22 @@ for (i in 2000:2021) {
   lotto <- bind_rows(lotto, dummy)
 }
 
+# 2022:
+# Quelle: https://www.sachsenlotto.de/portal/zahlen-quoten/gewinnzahlen/download-archiv/gewinnzahlen_download.jsp
+dummy <- read_excel("Lotto/Data/lotto6aus49/LOTTO_ab_2018.xls", sheet = "2022", skip = 1, guess_max = 10,
+                    col_names = FALSE) 
+dummy <- dummy %>%
+  mutate(z1 = as.numeric(dummy$"...3"),
+         z2 = as.numeric(dummy$"...4"),
+         z3 = as.numeric(dummy$"...5"),
+         z4 = as.numeric(dummy$"...6"),
+         z5 = as.numeric(dummy$"...7"),
+         z6 = as.numeric(dummy$"...8")) %>%
+  select(z1, z2, z3, z4, z5, z6) %>%
+  na.omit()
+
+lotto <- bind_rows(lotto, dummy)
+
 lotto <- lotto  %>%
   mutate(ziehung = row_number())
 
@@ -47,6 +63,8 @@ write.csv2(lotto, "Lotto/Data/lotto.csv", row.names = FALSE)
 lotto_long <- lotto %>%
   pivot_longer(!ziehung, names_to = NULL,
                values_to = "Ziffer")
+
+chris <- c(4,14,16,39,30,37)
 
 lotto %>%
   rowwise(ziehung) %>%
@@ -60,4 +78,4 @@ lotto %>%
   ungroup() %>%
   summarise(mean = mean(richtige))
 
-chris <- c(49,47,38,17,9,13)
+

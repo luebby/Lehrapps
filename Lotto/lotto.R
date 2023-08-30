@@ -8,7 +8,7 @@ library(knitr)
 library(kableExtra)
 
 # Authentifizierung für google-sheet
-gs4_auth(cache = ".secrets", email = "karlue74@gmail.com", use_oob = TRUE)
+gs4_auth(cache = ".secrets", email = "karlue74@gmail.com") #, use_oob = TRUE)
 ss <- "https://docs.google.com/spreadsheets/d/1Ex-yumPZGtpky2CntTEJDUUyJa-2_8KKV20EbPfvpW8"
 lotto <- read.csv2("Data/lotto.csv")
 
@@ -70,8 +70,8 @@ ui <- dashboardPage(
       Dabei werden keine personenbeziehbaren Daten gespeichert."),
     p("Die ausgewählten Zahlen werden zu Lehr- und Forschungszwecken ausgewertet."),
     verbatimTextOutput("test_box"),
-    p("Ihre gewählten Zahlen werden mit den Lottozahlen der Jahre 1955 bis 2021 abgeglichen."),
-    p("Datenbasis: https://www.westlotto.de"),
+    p("Ihre gewählten Zahlen werden mit den Lottozahlen der Jahre 1955 bis 2022 abgeglichen."),
+    p("Datenbasis: https://www.westlotto.de", "https://www.sachsenlotto.de/"),
     actionButton("go", "Abgabe"),
     actionButton("refresh", "Zurücksetzen")
   ),
