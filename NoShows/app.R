@@ -4,8 +4,22 @@ library(ggExtra)
 library(googlesheets4)
 library(shinyjs)
 
+
+gs4_auth(cache = ".secrets", email = "karlue74@gmail.com")
+ss <- "https://docs.google.com/spreadsheets/d/1hv9BSVuXJVpWNrBG30tVsiddjHTSuF7SKGv2oRFKDQc"
+
+saveData <- function(m){
+  erg <- data.frame(
+    si = si,
+    m = m
+  )
+  
+  sheet_append(ss, erg)
+}
+
+
 # Zufälliger Startwert für Slider
-si <- sample(0:10,1)
+si <- sample(0:20,1)/2
 # Beispieldaten
 PatientInnen <- data.frame(
   NoShows = c(rep(0,70), rep(1,40), rep(2,10), rep(3,20), rep(4,20), rep(5,40))
@@ -159,6 +173,7 @@ server <- function(input, output) {
   observeEvent(input$abgabe, {
     toggle('text_div')
     output$text <- renderText({"Vielen Dank für Ihre Datenspende!"})
+    saveData(input$k0)
   })
   
   observeEvent({input$k0}, {
