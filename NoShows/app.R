@@ -19,7 +19,7 @@ saveData <- function(m){
 
 
 # Zufälliger Startwert für Slider
-si <- sample(0:20,1)/2
+si <- sample(0:16,1)/2
 # Beispieldaten
 PatientInnen <- data.frame(
   NoShows = c(rep(0,70), rep(1,40), rep(2,10), rep(3,20), rep(4,20), rep(5,40))
@@ -41,12 +41,12 @@ ui <- navbarPage(
            sidebarLayout(
              sidebarPanel(
                h3("Aufgabenstellung:"),
-               p("Die Abbildung für 200 Tage wie viele Patient:innen jeweils nicht zum vereinbarten Termin erschienen sind."),
+               p("Die Abbildung zeigt, wie viele Patient:innen in 200 Tage jeweils nicht zum vereinbarten Termin erschienen sind."),
                p("Sie sollen diese Daten durch eine Kennzahl zusammenfassen; 
                  ein Modell für die beobachtete Anzahl der No-Shows."),
                p("Welche Kennzahl wählen Sie?"),
                h4("Eingabe:"),
-               sliderInput("k0", "Kennzahl:", min = 0, max = 10, value = si, step = 0.5),
+               sliderInput("k0", "Kennzahl:", min = 0, max = 8, value = si, step = 0.5),
                br(),
                h4("Bitte um Datenspende:"),
                p("Ihre gewählte Zahl können Sie zu Lehr- und Forschungszwecken anonym spenden."),
@@ -72,14 +72,14 @@ ui <- navbarPage(
              sidebarPanel(
                h3("Aufgabenstellung:"),
                p("Die Praxis verdient pro Patient:in Geld. Bei Leerlauf also weniger."),
-               p("Außerdem nehmen wir an, dass bei zu vielen Patient:innen andere Praxen kostenpflichtig beauftragt werdenn müssen."),
-               p("Daher ist die Praxis sehr daran interessiert, die Anzahl der No-Shows voherzusagen."),
+               p("Außerdem nehmen wir an, dass bei zu vielen Patient:innen andere Praxen kostenpflichtig beauftragt werden müssen."),
+               p("Daher ist die Praxis sehr daran interessiert, die Anzahl der No-Shows vorherzusagen."),
                p("Dies ist Ihr Auftrag. Sie bekommen dafür 200 Euro. Wenn Sie die Anzahl genau richtig vorhersagen bekommen Sie einen Bonus von 600 Euro."),
                p("Wenn Sie 2 vorhersagen und es kommmen 2 nicht, bekommen Sie den Bonus, 
                  wenn 3 nicht kommen gibt es keinen Bouns."),
-               p("Welche Zahl sollten Sie jetzt wählen, Bei welcher Zahl ist Ihr erwarteter Lohn maximal?"),
+               p("Welche Zahl sollten Sie jetzt wählen? Bei welcher Zahl ist Ihr erwarteter Lohn maximal?"),
                h4("Eingabe:"),
-               sliderInput("k1", "Ihre Vorhersage:", min = 0, max = 10, value = si, step = 0.5),
+               sliderInput("k1", "Ihre Vorhersage:", min = 0, max = 8, value = si, step = 0.5),
                h4("Ergebnis:"),
                textOutput("t1"),
                br(),
@@ -100,14 +100,14 @@ ui <- navbarPage(
              sidebarPanel(
                h3("Aufgabenstellung:"),
                p("Die Praxis verdient pro Patient:in Geld. Bei Leerlauf also weniger."),
-               p("Außerdem nehmen wir an, dass bei zu vielen Patient:innen andere Praxen kostenpflichtig beauftragt werdenn müssen."),
-               p("Daher ist die Praxis sehr daran interessiert, die Anzahl der No-Shows voherzusagen."),
+               p("Außerdem nehmen wir an, dass bei zu vielen Patient:innen andere Praxen kostenpflichtig beauftragt werden müssen."),
+               p("Daher ist die Praxis sehr daran interessiert, die Anzahl der No-Shows vorherzusagen."),
                p("Dies ist Ihr Auftrag. Sie bekommen dafür 800 Euro. Für jede Patient:in, die Sie daneben liegen werden Ihnen 50 Euro abgezogen."),
                p("Egal ob Sie zu wenig oder zu viel No-Shows vorhersagen. Liegen Sie 2 daneben bekommen Sie 2 * 50 = 100 Euro weniger, 
                  bei einer Abweichung von 3 gibt es 150 Euro weniger."),
-               p("Welche Zahl sollten Sie jetzt wählen, Bei welcher Zahl ist Ihr erwarteter Lohn maximal?"),
+               p("Welche Zahl sollten Sie jetzt wählen? Bei welcher Zahl ist Ihr erwarteter Lohn maximal?"),
                h4("Eingabe:"),
-               sliderInput("k2", "Ihre Vorhersage:", min = 0, max = 10, value = si, step = 0.5),
+               sliderInput("k2", "Ihre Vorhersage:", min = 0, max = 8, value = si, step = 0.5),
                h4("Ergebnis:"),
                textOutput("t2"),
                br(),
@@ -129,15 +129,15 @@ ui <- navbarPage(
              sidebarPanel(
                h3("Aufgabenstellung:"),
                p("Die Praxis verdient pro Patient:in Geld. Bei Leerlauf also weniger."),
-               p("Außerdem nehmen wir an, dass bei zu vielen Patient:innen andere Praxen kostenpflichtig beauftragt werdenn müssen."),
+               p("Außerdem nehmen wir an, dass bei zu vielen Patient:innen andere Praxen kostenpflichtig beauftragt werden müssen."),
                p("Daher ist die Praxis sehr daran interessiert, die Anzahl der No-Shows voherzusagen."),
                p("Dies ist Ihr Auftrag. Sie bekommen dafür 1000 Euro."),
                p("Da große Abweichungen schlimmer sind, bekommen Sie für die Abweichung ins Quadrat 30 Euro abgezogen."),
                p("Egal ob Sie zu wenig oder zu viel No-Shows vorhersagen. Liegen Sie 2 daneben bekommen Sie 2² * 30 = 120 Euro weniger, 
                  bei einer Abweichung von 3 dann 270 Euro."),
-               p("Welche Zahl sollten Sie jetzt wählen, Bei welcher Zahl ist Ihr erwarteter Lohn maximal?"),
+               p("Welche Zahl sollten Sie jetzt wählen? Bei welcher Zahl ist Ihr erwarteter Lohn maximal?"),
                h4("Eingabe:"),
-               sliderInput("k3", "Ihre Vorhersage:", min = 0, max = 10, value = si, step = 0.5),
+               sliderInput("k3", "Ihre Vorhersage:", min = 0, max = 8, value = si, step = 0.5),
                h4("Ergebnis:"),
                textOutput("t3"),
                br(),
@@ -201,11 +201,11 @@ server <- function(input, output) {
     )
     
     # add more tick mark on x axis
-    dotchart = dotchart + scale_x_continuous(breaks = seq(0,10,1), limits = c(0,10))
+    dotchart = dotchart + scale_x_continuous(breaks = seq(0,8,1), limits = c(0,8))
     # add tick mark on y axis to reflect frequencies. Note yheight is max frequency.
     dotchart = dotchart + scale_y_continuous(limits=c(0, 1/ratio), expand = c(0, 0), 
-                                             breaks = seq(0, 1/ratio, 1/yheight*5*1/ratio), 
-                                             labels=seq(0,yheight,5))
+                                             breaks = seq(0, 1/ratio, 1/yheight*10*1/ratio), 
+                                             labels=seq(0,yheight,10))
     # Add Slider Choice
     dotchart = dotchart + geom_vline(xintercept = input$k0)
     dotchart = dotchart + annotate("text", x = input$k0 + 1, y = 0.90*1/ratio, 
@@ -237,11 +237,11 @@ server <- function(input, output) {
     )
     
     # add more tick mark on x axis
-    dotchart = dotchart + scale_x_continuous(breaks = seq(0,10,1), limits = c(0,10))
+    dotchart = dotchart + scale_x_continuous(breaks = seq(0,8,1), limits = c(0,8))
     # add tick mark on y axis to reflect frequencies. Note yheight is max frequency.
     dotchart = dotchart + scale_y_continuous(limits=c(0, 1/ratio), expand = c(0, 0), 
-                                             breaks = seq(0, 1/ratio, 1/yheight*5*1/ratio), 
-                                             labels=seq(0,yheight,5))
+                                             breaks = seq(0, 1/ratio, 1/yheight*10*1/ratio), 
+                                             labels=seq(0,yheight,10))
     # Add Slider Choice
     dotchart = dotchart + geom_vline(xintercept = input$k1, color = "#FF8811")
     dotchart = dotchart + annotate("text", x = input$k1 + 1.5, y = 0.90*1/ratio, 
@@ -289,11 +289,11 @@ server <- function(input, output) {
     )
     
     # add more tick mark on x axis
-    dotchart = dotchart + scale_x_continuous(breaks = seq(0,10,1), limits = c(0,10))
+    dotchart = dotchart + scale_x_continuous(breaks = seq(0,8,1), limits = c(0,8))
     # add tick mark on y axis to reflect frequencies. Note yheight is max frequency.
     dotchart = dotchart + scale_y_continuous(limits=c(0, 1/ratio), expand = c(0, 0), 
-                                             breaks = seq(0, 1/ratio, 1/yheight*5*1/ratio), 
-                                             labels=seq(0,yheight,5))
+                                             breaks = seq(0, 1/ratio, 1/yheight*10*1/ratio), 
+                                             labels=seq(0,yheight,10))
     # Add Slider Choice
     dotchart = dotchart + geom_vline(xintercept = input$k2, color = "#DA70D6")
     dotchart = dotchart + annotate("text", x = input$k2 + 1.5, y = 0.90*1/ratio, 
@@ -341,11 +341,11 @@ server <- function(input, output) {
     )
     
     # add more tick mark on x axis
-    dotchart = dotchart + scale_x_continuous(breaks = seq(0,10,1), limits = c(0,10))
+    dotchart = dotchart + scale_x_continuous(breaks = seq(0,8,1), limits = c(0,8))
     # add tick mark on y axis to reflect frequencies. Note yheight is max frequency.
     dotchart = dotchart + scale_y_continuous(limits=c(0, 1/ratio), expand = c(0, 0), 
-                                             breaks = seq(0, 1/ratio, 1/yheight*5*1/ratio), 
-                                             labels=seq(0,yheight,5))
+                                             breaks = seq(0, 1/ratio, 1/yheight*10*1/ratio), 
+                                             labels=seq(0,yheight,10))
     # Add Slider Choice
     dotchart = dotchart + geom_vline(xintercept = input$k3, color = "#808000")
     dotchart = dotchart + annotate("text", x = input$k3 + 1.5, y = 0.90*1/ratio, 
@@ -393,14 +393,14 @@ server <- function(input, output) {
            \\underbrace{3,3, \\ldots, 3}_{20 \\times}, \\underbrace{4,4, \\ldots, 4}_{20 \\times},
            \\underbrace{5,5, \\ldots, 5}_{40 \\times}}_{100}$$
            Diese sind hier beides Einsen:
-           $$y_{0.5}=1$$")
+           $$y_{(0.5)}=1$$")
     )
   })
   
   output$mittelwert <- renderUI({
     withMathJax(
       HTML("Der arithmetische Mittelwert ist die Summe aller Beobachtungswerte geteilt durch die Anzahl Beobachtungen.
-           $$\\bar{y}= \\frac{70 \\cdot 0 + 40 \\cdot 1 + 10 \\cdot 2 + 20 \\cdot 3 + 20 \\cdot 4 + 40 \\cdot 5}{70+40+10+20+20+40}=2$$")
+           $$\\bar{y}= \\frac{70 \\cdot 0 + 40 \\cdot 1 + 10 \\cdot 2 + 20 \\cdot 3 + 20 \\cdot 4 + 40 \\cdot 5}{70+40+10+20+20+40}=\\frac{0+40+20+60+80+200}{200}=2$$")
     )
   })
   
@@ -423,11 +423,11 @@ server <- function(input, output) {
     )
     
     # add more tick mark on x axis
-    dotchart = dotchart + scale_x_continuous(breaks = seq(0,10,1), limits = c(0,10))
+    dotchart = dotchart + scale_x_continuous(breaks = seq(0,8,1), limits = c(0,8))
     # add tick mark on y axis to reflect frequencies. Note yheight is max frequency.
     dotchart = dotchart + scale_y_continuous(limits=c(0, 1/ratio), expand = c(0, 0), 
-                                             breaks = seq(0, 1/ratio, 1/yheight*5*1/ratio), 
-                                             labels=seq(0,yheight,5))
+                                             breaks = seq(0, 1/ratio, 1/yheight*10*1/ratio), 
+                                             labels=seq(0,yheight,10))
     # Add Central Tendency
     dotchart = dotchart + geom_vline(xintercept = 2, color = "#808000")
     dotchart = dotchart + annotate("text", x = 2.75, y = 0.70*1/ratio, 
