@@ -93,7 +93,15 @@ ui <- navbarPage(
                h4("Daten"),
                plotOutput("k1"),
                h4("Berechnung erwarteter Lohn:"),
-               uiOutput("eqn1")
+               uiOutput("eqn1"),
+               # https://stackoverflow.com/questions/54876731/inline-latex-equations-in-shiny-app-with-mathjax
+               tags$div(HTML("<script type='text/x-mathjax-config' >
+               MathJax.Hub.Config({
+               tex2jax: {inlineMath: [['$','$']]}
+               });
+               </script >
+                             ")),
+               uiOutput("h1")
              )
              )),
   tabPanel("2. Szenario",
@@ -269,6 +277,13 @@ server <- function(input, output) {
       \\frac{20}{200} \\cdot 1_{4 = %.1f}  +
       \\frac{40}{200} \\cdot 1_{5 = %.1f}) \\cdot 600 =
       %.1f $$', input$k1, input$k1, input$k1, input$k1, input$k1, input$k1, g1))
+  })
+  
+  output$h1 <- renderUI({
+    withMathJax(
+      HTML("Hinweis: $1_{A}$ ist die Indikatorfunktion. Sie nimmt den Wert $1$ an, wenn die Aussage $A: y = m$, stimmt. 
+           Hier also $1_{A}=1$, wenn $y$ den von Ihnen gewählten Wert $m$ annimmt. Ansonsten ist $1_{A}=0$.")
+    )
   })
   
   output$k2<- renderPlot({

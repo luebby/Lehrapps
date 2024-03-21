@@ -46,7 +46,8 @@ ui <- dashboardPage(
     p("Geben Sie eine Zahlenfolge in die Felder ein, und ich sage Ihnen, ob sie die Regel erfüllt oder nicht."),
     p("Sie können so viele Folgen testen, wie Sie möchten."),
     p("Ihre Aufgabe ist es die Regel zu finden!"),
-    p("Hinweis: Die ausgewählten Zahlen sowie Ihre Regel wird zu Lehr- und Forschungszwecken anonym ausgewertet.")
+    p("Hinweis: Die ausgewählten Zahlen sowie Ihre Regel wird zu Lehr- und Forschungszwecken anonym ausgewertet."),
+    p("In Anlehnung an: TheUpshot - David Leonhard, A Quick Puzzle to Test Your Problem Solving. https://nyti.ms/45ooAzC")
   ),
   
   dashboardBody(
@@ -97,7 +98,7 @@ server <- function(input, output) {
       Sie vermuten diese Regel, und testen Zahlen, die dieser Regel gehochen, z.B. 3,6,12. 
       Dies ist aber eine Form des Confirmation Bias (Bestätigungsfehler)."})
     saveData(values$data, input$regel)
-  })
+  }, once = TRUE)
   
   output$auswertung <- function() {
     values$data %>%
